@@ -13,7 +13,7 @@ import asyncio
 
 
 
-TOKEN = 'OTE2MjE0NTM0MjYyMzc4NTM2.Yam5Rw.W6iSB7D9GObna0ZuqVwYsefUkDU'
+TOKEN = 'token'
 
 client = discord.Client()
 
