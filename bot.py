@@ -7,8 +7,9 @@ from datetime import datetime
 import logging
 import discord
 
+from scraping import Scrapping
 import asyncio
-
+import gc
 
 
 
@@ -17,13 +18,15 @@ TOKEN = 'token'
 
 client = discord.Client()
 
+scrap = Scrapping()
+
 @client.event  # oto element logujacy
 async def on_ready():
     print('We are login as {0.user}'.format(client))
 
 
 
-jarkendar=client.get_channel(920557144384868403)
+jarkendar=client.get_channel(channelid)
 
 
 
@@ -37,7 +40,7 @@ async def on_message(message):
     username = str(message.author).split('#')[0]
     user_message = str(message.content)
     channel = str(message.channel.name)
-    print(f'{username}: {user_message}({channel})')
+    # print(f'{username}: {user_message}({channel})')
 #ponizej ladujemy sobie plik z memami
     #fileNameArray = [x for x in os.listdir("E:/memowo") if os.path.isfile(os.path.join("E:/memowo", x))]
     fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
@@ -67,6 +70,9 @@ async def on_message(message):
             response = f'This is your random number: {random.randrange(10000)}'
             await message.channel.send(response)
             return
+
+    if user_message.lower() == '!pancerniaki':
+        await message.channel.send(scrap.pancernioki())
 
     if user_message.lower() == '!anywhere':
         await message.channel.send('this can be used anywhere!')
@@ -157,17 +163,17 @@ async def daty_godziny ():
         data, godzina = czass
         dane_czas = godzina.split(':', 3)
         godz, minuta, sekunda = dane_czas
-        print((godzina, papierz, czass, godzina, godz, minuta, sekunda))
+        # print((godzina, papierz, czass, godzina, godz, minuta, sekunda))
         if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
             papa = 1
-            # await samo_jedzonko.send('ja też umiem w papierzową')
-            # await samo_jedzonko.send(file=discord.File('C:/programowanko/specjal/papiez-anime.gif'))
-            await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
-            await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
-            time.sleep(1)
-            await samo_jedzonko.send('OOO Papierzu Boże Imperatorze przybądź !!!!')
-            time.sleep(3)
-            await samo_jedzonko.send(file=discord.File('./specjal/papemperor1.jpg'))
+            await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
+            await samo_jedzonko.send(file=discord.File('C:/programowanko/specjal/papiez-anime.gif'))
+            # await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
+            # await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
+            # time.sleep(1)
+            # await samo_jedzonko.send('OOO Papierzu Boże Imperatorze przybądź !!!!')
+            # time.sleep(3)
+            # await samo_jedzonko.send(file=discord.File('./specjal/papemperor1.jpg'))
 
 
         elif int(godz)==21 and int(minuta)==38:

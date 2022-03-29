@@ -25,10 +25,7 @@ message='Najbliższe odcinki 4 pancernych i psa to :\n'
 temp=[]
 for emisja in kanal_emisji:
     temp = emisja.split('\n')
-    # temp.split('''\n''')
-    # temp.remove('')
-    # temp.remove('')
-    # print(temp)
+
     message+= f'Dzień emisji {temp[0]}\n' \
               f'Godzina emisji {temp[1]}\n' \
               f'Odcinek {temp[2]}\n' \
