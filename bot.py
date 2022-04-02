@@ -14,7 +14,7 @@ import gc
 
 
 
-TOKEN = 'token'
+TOKEN = 'key'
 
 client = discord.Client()
 
@@ -26,7 +26,7 @@ async def on_ready():
 
 
 
-jarkendar=client.get_channel(channelid)
+jarkendar=client.get_channel(chanel)
 
 
 
