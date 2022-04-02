@@ -42,8 +42,31 @@ future = future.strftime("%d/%m/%Y")
 
 date = date.strftime("%d/%m/%Y")
 
-matching_plastik_df =plastiki_df[(plastiki_df.plastiki >= pd.to_datetime(date, dayfirst=True))]
-# print(f'pasujące {matching_plastik_df}')
-matching_plastik_df = matching_plastik_df[(plastiki_df.plastiki <= pd.to_datetime(future, dayfirst=True))]
+message = ''
 
-print(f'pasujące {matching_plastik_df}')
+matching_plastik_df =plastiki_df[(plastiki_df.plastiki >= pd.to_datetime(date, dayfirst=True)) &
+                                 (plastiki_df.plastiki <= pd.to_datetime(future, dayfirst=True))]
+
+if not matching_plastik_df.empty:
+    message += f"Plastiki {matching_plastik_df.plastiki.dt.strftime('%Y-%m-%d').values[0]} it's: " \
+               f"{str(matching_plastik_df.plastiki.dt.day_name().values[0])} \n"
+
+# print(f'pasujące {matching_plastik_df}')
+# matching_plastik_df = matching_plastik_df[(plastiki_df.plastiki <= pd.to_datetime(future, dayfirst=True))]
+
+matching_mieszane_df = mieszane_df[(mieszane_df.mieszane >= pd.to_datetime(date, dayfirst=True)) &
+                                   (mieszane_df.mieszane <= pd.to_datetime(future, dayfirst=True))]
+
+
+
+
+matching_gabaryty_df = gabaryt_df[(gabaryt_df.gabaryt >= pd.to_datetime(date, dayfirst=True)) &
+                                  (gabaryt_df.gabaryt <= pd.to_datetime(future, dayfirst=True))]
+if matching_gabaryty_df.empty:
+    matching_gabaryty_df = 'Nic tu nie ma pusto'
+
+
+
+print(f'pasujące {matching_plastik_df.plastiki.dt.day_name()} \n {matching_mieszane_df.mieszane.dt.strftime("%Y-%m-%d").values} \n {matching_gabaryty_df}')
+
+print(message)
