@@ -96,3 +96,11 @@ if not matching_popiol_df.empty:
 print(f'pasujące {matching_plastik_df.plastiki.dt.day_name()} \n {matching_mieszane_df.mieszane.dt.strftime("%Y-%m-%d").values} \n {matching_gabaryty_df}')
 
 print(message)
+
+
+
+matching_garbage_df = garbage_df[(garbage_df >= pd.to_datetime(date, dayfirst=True))]
+
+matching_garbage_df = matching_garbage_df.to_dict()
+
+print(matching_garbage_df)

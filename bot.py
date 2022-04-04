@@ -9,12 +9,13 @@ import discord
 
 from scraping import Scrapping
 import asyncio
+from dates import Garbage
 import gc
 
 
 
 
-TOKEN = 'key'
+TOKEN = 'token'
 
 client = discord.Client()
 
@@ -26,11 +27,13 @@ async def on_ready():
 
 
 
-jarkendar=client.get_channel(chanel)
+jarkendar=client.get_channel(channel)
 
 
 
+me = '<@id>'
 
+trash = Garbage()
 
 
 
@@ -144,6 +147,10 @@ async def on_message(message):
         await message.channel.send('Ironiczny. Mógł uratować innych od śmierci, ale nie siebie.')
 
 
+    if user_message.lower() == '!śmieci':
+        await message.channel.send(f'%s\n {trash.trash_time()}' % me)
+
+
 
 async def daty_godziny ():
 
@@ -178,6 +185,9 @@ async def daty_godziny ():
 
         elif int(godz)==21 and int(minuta)==38:
             papa = 0
+
+        if (int(godz) == 12 and int(minuta) == 00) or (int(godz) == 20 and int(minuta) == 00 ):
+            await jarkendar.send(f'%s\n {trash.trash_time()}' % m)
 
 client.loop.create_task(daty_godziny())
 
