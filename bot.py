@@ -9,7 +9,7 @@ import discord
 
 from scraping import Scrapping
 import asyncio
-from dates import Garbage
+from datson import Garbagson
 import gc
 
 
@@ -31,9 +31,9 @@ jarkendar=client.get_channel(channel)
 
 
 
-me = '<@id>'
+me = '<myid>'
 
-trash = Garbage()
+trash = Garbagson()
 
 
 
@@ -174,7 +174,7 @@ async def daty_godziny ():
         if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
             papa = 1
             await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
-            await samo_jedzonko.send(file=discord.File('C:/programowanko/specjal/papiez-anime.gif'))
+            await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
             # await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
             # await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
             # time.sleep(1)
@@ -187,7 +187,7 @@ async def daty_godziny ():
             papa = 0
 
         if (int(godz) == 12 and int(minuta) == 00) or (int(godz) == 20 and int(minuta) == 00 ):
-            await jarkendar.send(f'%s\n {trash.trash_time()}' % m)
+            await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
 
 client.loop.create_task(daty_godziny())
 
