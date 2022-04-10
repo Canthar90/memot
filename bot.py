@@ -100,7 +100,7 @@ async def on_message(message):
 
     testowystr = user_message.lower()
 
-    if ('gdzie spok' in testowystr) or ('hej spok'in testowystr) or ('gdzie jest spok' in testowystr):
+    if ('gdzie spok' in testowystr) or ('hej spok' in testowystr) or ('gdzie jest spok' in testowystr):
         time.sleep(8)
         await message.channel.send('SPOOOOKKKK')
         time.sleep(5)
@@ -161,7 +161,7 @@ async def daty_godziny ():
     samo_jedzonko = client.get_channel(419997785614712834)
     papa = 0
     while not client.is_closed():
-        await asyncio.sleep(20)
+        await asyncio.sleep(60)
         papierz = 0
 
         now = datetime.now()
