@@ -197,7 +197,7 @@ async def daty_godziny ():
         elif int(godz)==21 and int(minuta)==38:
             papa = 0
 
-        if (int(godz) == 12 and int(minuta) == 00) or (int(godz) == 20 and int(minuta) == 00):
+        if (int(godz) == 12 and int(minuta) == 0) or (int(godz) == 20 and int(minuta) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
 
 client.loop.create_task(daty_godziny())
