@@ -63,8 +63,8 @@ class Garbagson():
 
         matching_szklo = [glass for glass in szklo_dt if glass >= current and glass <= future]
         if not matching_szklo == empty:
-            message += f"Szkło at: {matching_popioły[0].strftime('%A')} full date: " \
-                       f"{matching_popioły[0].strftime('%d-%m-%Y')} \n"
+            message += f"Szkło at: {matching_szklo[0].strftime('%A')} full date: " \
+                       f"{matching_szklo[0].strftime('%d-%m-%Y')} \n"
 
         matching_bio = [flower for flower in bio_dt if flower >= current and flower <= future]
         if not matching_bio == empty:
