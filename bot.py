@@ -27,8 +27,9 @@ async def on_ready():
 
 
 
-jarkendar=client.get_channel(channel)
 
+jarkendar = client.get_channel(channel1)
+samo_jedzonko = client.get_channel(channel2)
 
 
 me = '<myid>'
@@ -157,8 +158,8 @@ async def daty_godziny ():
     await client.wait_until_ready()
 
     time.sleep(4)
-    jarkendar = client.get_channel(920557144384868403)
-    samo_jedzonko = client.get_channel(419997785614712834)
+
+
     papa = 0
     while not client.is_closed():
         await asyncio.sleep(60)
@@ -186,7 +187,7 @@ async def daty_godziny ():
         elif int(godz)==21 and int(minuta)==38:
             papa = 0
 
-        if (int(godz) == 12 and int(minuta) == 00) or (int(godz) == 20 and int(minuta) == 00 ):
+        if (int(godz) == 12 and int(minuta) == 00) or (int(godz) == 20 and int(minuta) == 00):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
 
 client.loop.create_task(daty_godziny())
