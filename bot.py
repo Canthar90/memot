@@ -7,7 +7,7 @@ from datetime import datetime
 import logging
 import discord
 
-from scraping import Scrapping
+from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson
 import gc
@@ -16,6 +16,7 @@ import gc
 
 
 TOKEN = 'token'
+
 
 client = discord.Client()
 
@@ -28,15 +29,17 @@ async def on_ready():
 
 
 
+
 jarkendar = client.get_channel(channel1)
 samo_jedzonko = client.get_channel(channel2)
 
 
 me = '<myid>'
 
+
 trash = Garbagson()
 
-
+allegros = Allegro_scrapping()
 
 @client.event
 
@@ -150,6 +153,13 @@ async def on_message(message):
 
     if user_message.lower() == '!śmieci':
         await message.channel.send(f'%s\n {trash.trash_time()}' % me)
+
+
+    if '!asearch' in user_message.lower():
+        fraze = user_message.split(',')
+        fraze = [elem.strip() for elem in fraze]
+        await message.channel.send(allegros.single_search(fraze[1:]))
+
 
 
 
