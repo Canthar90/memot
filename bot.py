@@ -230,7 +230,7 @@ async def daty_godziny ():
 
         if int(godz) == 4 and int(minuta) == 50:
             await jarkendar.send(weather.requesting(starting['home']))
-            await jarkendar.send(weather.requesting(starting['wpork']))
+            await jarkendar.send(weather.requesting(starting['work']))
 
 client.loop.create_task(daty_godziny())
 
