@@ -34,13 +34,12 @@ async def on_ready():
 
 
 
-# jarkendar = client.get_channel(channel1)
-# samo_jedzonko = client.get_channel(channel2)
+
 jarkendar = client.get_channel(starting['jarkendar'])
 samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
 bot_test = client.get_channel(starting['bot_test'])
 
-# me = '<myid>'
+
 me = starting['me']
 
 trash = Garbagson()
@@ -167,8 +166,18 @@ async def on_message(message):
         await message.channel.send(allegros.single_search(fraze[1:]))
 
 
-    if '!forecast' in user_message.lower():
+    if '!forecast' in user_message.lower() and user_message != '!forecast':
+        city = user_message.split(',')
+        city = [elem.strip() for elem in city]
+        try:
+            await message.channel.send(weather.requesting(city[1]))
+        except:
+            await message.channel.send("Nie posiadam takiej miejscowości w swojej bazie")
+    elif '!forecast' in user_message.lower() and user_message == '!forecast':
         await message.channel.send(weather.weather_check())
+
+    if user_message.lower() == "!help":
+        await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
 
 
@@ -178,9 +187,6 @@ async def daty_godziny ():
     await client.wait_until_ready()
 
     time.sleep(4)
-    # jarkendar = client.get_channel(channel1)
-    # samo_jedzonko = client.get_channel(channel2)
-    # bot_test = client.get_channel(channel3)
     jarkendar = client.get_channel(starting['jarkendar'])
     samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
     bot_test = client.get_channel(starting['bot_test'])
@@ -199,15 +205,18 @@ async def daty_godziny ():
         godz, minuta, sekunda = dane_czas
         # print((godzina, papierz, czass, godzina, godz, minuta, sekunda))
         if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
+            pull = random.randint(1, 2)
             papa = 1
-            await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
-            await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
-            # await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
-            # await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
-            # time.sleep(1)
-            # await samo_jedzonko.send('OOO Papierzu Boże Imperatorze przybądź !!!!')
-            # time.sleep(3)
-            # await samo_jedzonko.send(file=discord.File('./specjal/papemperor1.jpg'))
+            if pull == 1:
+                await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
+                await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
+            elif pull == 2:
+                await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
+                await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
+                time.sleep(1)
+                await samo_jedzonko.send('OOO Papierzu Boże Imperatorze przybądź !!!!')
+                time.sleep(3)
+                await samo_jedzonko.send(file=discord.File('./specjal/papemperor1.jpg'))
 
 
         elif int(godz)==21 and int(minuta)==38:
@@ -216,8 +225,12 @@ async def daty_godziny ():
         if (int(godz) == 12 and int(minuta) == 0) or (int(godz) == 20 and int(minuta) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
 
-        if int(godz)== 6 and int(minuta) == 0:
+        if int(godz) == 6 and int(minuta) == 0:
             await bot_test.send(weather.weather_check())
+
+        if int(godz) == 4 and int(minuta) == 50:
+            await jarkendar.send(weather.requesting(starting['home']))
+            await jarkendar.send(weather.requesting(starting['wpork']))
 
 client.loop.create_task(daty_godziny())
 
