@@ -168,7 +168,8 @@ async def daty_godziny ():
     await client.wait_until_ready()
 
     time.sleep(4)
-
+    jarkendar = client.get_channel(channel1)
+    samo_jedzonko = client.get_channel(channel2)
 
     papa = 0
     while not client.is_closed():
