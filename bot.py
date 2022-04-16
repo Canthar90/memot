@@ -1,12 +1,12 @@
 import os
 import random
-import threading
-import time
-import asyncio
-from datetime import datetime
-import logging
-import discord
 
+import time
+
+from datetime import datetime
+
+import discord
+import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson
@@ -14,10 +14,11 @@ from apis import Weather_forecasting
 import gc
 
 
+with open("starting.json") as start:
+    starting = json.load(start)
 
-
-TOKEN = 'token'
-
+# TOKEN = 'token'
+TOKEN = starting['token']
 
 client = discord.Client()
 
@@ -33,12 +34,14 @@ async def on_ready():
 
 
 
-jarkendar = client.get_channel(channel1)
-samo_jedzonko = client.get_channel(channel2)
+# jarkendar = client.get_channel(channel1)
+# samo_jedzonko = client.get_channel(channel2)
+jarkendar = client.get_channel(starting['jarkendar'])
+samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
+bot_test = client.get_channel(starting['bot_test'])
 
-
-me = '<myid>'
-
+# me = '<myid>'
+me = starting['me']
 
 trash = Garbagson()
 
@@ -175,9 +178,13 @@ async def daty_godziny ():
     await client.wait_until_ready()
 
     time.sleep(4)
-    jarkendar = client.get_channel(channel1)
-    samo_jedzonko = client.get_channel(channel2)
-    bot_test = client.get_channel(channel3)
+    # jarkendar = client.get_channel(channel1)
+    # samo_jedzonko = client.get_channel(channel2)
+    # bot_test = client.get_channel(channel3)
+    jarkendar = client.get_channel(starting['jarkendar'])
+    samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
+    bot_test = client.get_channel(starting['bot_test'])
+
 
     papa = 0
     while not client.is_closed():
@@ -209,7 +216,7 @@ async def daty_godziny ():
         if (int(godz) == 12 and int(minuta) == 0) or (int(godz) == 20 and int(minuta) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
 
-        if int(godz)==6 and int(minuta) == 0:
+        if int(godz)== 6 and int(minuta) == 0:
             await bot_test.send(weather.weather_check())
 
 client.loop.create_task(daty_godziny())
