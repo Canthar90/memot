@@ -10,6 +10,7 @@ import discord
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson
+from apis import Weather_forecasting
 import gc
 
 
@@ -21,6 +22,8 @@ TOKEN = 'token'
 client = discord.Client()
 
 scrap = Scrapping()
+
+weather = Weather_forecasting()
 
 @client.event  # oto element logujacy
 async def on_ready():
@@ -161,6 +164,10 @@ async def on_message(message):
         await message.channel.send(allegros.single_search(fraze[1:]))
 
 
+    if '!forecast' in user_message.lower():
+        await message.channel.send(weather.weather_check())
+
+
 
 
 async def daty_godziny ():
@@ -170,6 +177,7 @@ async def daty_godziny ():
     time.sleep(4)
     jarkendar = client.get_channel(channel1)
     samo_jedzonko = client.get_channel(channel2)
+    bot_test = client.get_channel(channel3)
 
     papa = 0
     while not client.is_closed():
@@ -200,6 +208,9 @@ async def daty_godziny ():
 
         if (int(godz) == 12 and int(minuta) == 0) or (int(godz) == 20 and int(minuta) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
+
+        if int(godz)==6 and int(minuta) == 0:
+            await bot_test.send(weather.weather_check())
 
 client.loop.create_task(daty_godziny())
 
