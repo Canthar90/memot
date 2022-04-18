@@ -14,6 +14,7 @@ import asyncio
 from datson import Garbagson
 from apis import Weather_forecasting
 import gc
+from discord import FFmpegPCMAudio
 
 
 with open("starting.json") as start:
@@ -135,13 +136,16 @@ async def on_message(message):
         komenda, liczba = lista
 
         if komenda.lower() == '!spam' :
-            for i in range(0,int(liczba)):
-                # plik_spam = random.choice([x for x in os.listdir("E:\memowo") if os.path.isfile(os.path.join("E:\memowo", x))])
-                plik_spam = random.choice(fileNameArray)
-                de_cat_spam ='./memowo/'
-                plik2_spam = de_cat_spam+plik_spam
-                await message.channel.send(file=discord.File(plik2_spam))
-               
+            if int(liczba) > 10:
+                await message.channel.send("Paaanie nie szalej pan")
+            else:
+                for i in range(0,int(liczba)):
+                    # plik_spam = random.choice([x for x in os.listdir("E:\memowo") if os.path.isfile(os.path.join("E:\memowo", x))])
+                    plik_spam = random.choice(fileNameArray)
+                    de_cat_spam ='./memowo/'
+                    plik2_spam = de_cat_spam+plik_spam
+                    await message.channel.send(file=discord.File(plik2_spam))
+
     if ('linux' in testowystr) or ('ubuntu' in testowystr) or ('linuks' in testowystr):
         time.sleep(3)
         await message.channel.send('Linux jest darmowy i otwarty gdy twój czas jest gówno warty')
@@ -200,7 +204,9 @@ async def test(ctx):
 async def join(ctx):
     if (ctx.author.voice):
         channel = ctx.author.voice.channel
-        await channel.connect(reconnect=False)
+        voice = await channel.connect(reconnect=False)
+        source = FFmpegPCMAudio('./sounds/entry.mp3')
+        player = voice.play(source)
     else:
         await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
 
@@ -224,7 +230,7 @@ async def daty_godziny ():
     papa = 0
     while not client.is_closed():
         await asyncio.sleep(60)
-        papierz = 0
+
 
         now = datetime.now()
         dataczas = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -232,7 +238,7 @@ async def daty_godziny ():
         data, godzina = czass
         dane_czas = godzina.split(':', 3)
         godz, minuta, sekunda = dane_czas
-        # print((godzina, papierz, czass, godzina, godz, minuta, sekunda))
+
         if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
             pull = random.randint(1, 2)
             papa = 1
