@@ -2,10 +2,12 @@ import os
 import random
 
 import time
-
+import logging
 from datetime import datetime
-
 import discord
+from discord import Game
+from discord.ext import commands
+from discord.ext.commands import Bot
 import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
@@ -20,15 +22,24 @@ with open("starting.json") as start:
 # TOKEN = 'token'
 TOKEN = starting['token']
 
-client = discord.Client()
+# client = discord.Client()
+client = Bot('!')
 
 scrap = Scrapping()
 
 weather = Weather_forecasting()
+paczuchy = client.get_channel(starting["voice_channel"])
+logging.basicConfig(level=logging.INFO)
+
 
 @client.event  # oto element logujacy
 async def on_ready():
-    print('We are login as {0.user}'.format(client))
+
+    logging.info('We are login as {0.user}'.format(client))
+    # await paczuchy.connect()
+
+
+
 
 
 
@@ -58,7 +69,6 @@ async def on_message(message):
     fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
     #print(fileNameArray)
    # "C:/programowanko/memowo"
-    
 
     if message.author == client.user:  #bot nie odpowiada sam sobie
         return
@@ -179,6 +189,25 @@ async def on_message(message):
     if user_message.lower() == "!help":
         await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
+    await client.process_commands(message)
+
+
+@client.command(pass_context=True)
+async def test(ctx):
+    await ctx.send("testujemy")
+
+@client.command(pass_context=True)
+async def join(ctx):
+    if (ctx.author.voice):
+        channel = ctx.author.voice.channel
+        await channel.connect(reconnect=False)
+    else:
+        await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
+
+@client.command(pass_context=True)
+async def leave(ctx):
+    if (ctx.voice_client):
+        await ctx.guild.voice_client.disconnect()
 
 
 
