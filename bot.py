@@ -6,7 +6,7 @@ import logging
 from datetime import datetime
 import discord
 from discord import Game
-from discord.ext import commands
+from discord.ext import commands, tasks
 from discord.ext.commands import Bot
 import json
 from scraping import Scrapping, Allegro_scrapping
@@ -207,6 +207,10 @@ async def join(ctx):
         voice = await channel.connect(reconnect=False)
         source = FFmpegPCMAudio('./sounds/entry.mp3')
         player = voice.play(source)
+        time.sleep(20)
+
+        voice.stop()
+
     else:
         await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
 
@@ -214,7 +218,6 @@ async def join(ctx):
 async def leave(ctx):
     if (ctx.voice_client):
         await ctx.guild.voice_client.disconnect()
-
 
 
 async def daty_godziny ():
@@ -229,7 +232,7 @@ async def daty_godziny ():
 
     papa = 0
     while not client.is_closed():
-        await asyncio.sleep(60)
+        await asyncio.sleep(59)
 
 
         now = datetime.now()
@@ -243,9 +246,19 @@ async def daty_godziny ():
             pull = random.randint(1, 2)
             papa = 1
             if pull == 1:
+                @client.event
+                async def on_message(ctx):
+                    sound = FFmpegPCMAudio(starting["shadow_sound1"])
+                    await ctx.guild.voice_client.play(sound)
                 await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
                 await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
+
+
             elif pull == 2:
+                @client.event
+                async def on_message(ctx):
+                    sound = FFmpegPCMAudio(starting["shadow_sound1"])
+                    await ctx.guild.voice_client.play(sound)
                 await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
                 await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
                 time.sleep(1)
@@ -263,7 +276,7 @@ async def daty_godziny ():
         if int(godz) == 6 and int(minuta) == 0:
             await bot_test.send(weather.weather_check())
 
-        if int(godz) == 4 and int(minuta) == 50:
+        if int(godz) == 3 and int(minuta) == 50:
             await jarkendar.send(weather.requesting(starting['home']))
             await jarkendar.send(weather.requesting(starting['work']))
 
