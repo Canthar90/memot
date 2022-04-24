@@ -64,8 +64,9 @@ class Allegro_scrapping():
 
         time.sleep(1)
         search_pole = driver.find_element(
-            By.XPATH, "/html/body/div[2]/div[2]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input")
+            By.XPATH, "/html/body/div[3]/div[3]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input")
 
+        # /html/body/div[3]/div[3]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input
         action.click(on_element=search_pole)
         action.send_keys(search_word)
         action.key_down(Keys.ENTER)

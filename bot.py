@@ -276,6 +276,7 @@ async def daty_godziny ():
         if int(godz) == 6 and int(minuta) == 0:
             await bot_test.send(weather.weather_check())
 
+
         if int(godz) == 3 and int(minuta) == 50:
             await jarkendar.send(weather.requesting(starting['home']))
             await jarkendar.send(weather.requesting(starting['work']))
