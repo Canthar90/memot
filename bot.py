@@ -58,12 +58,16 @@ trash = Garbagson()
 
 allegros = Allegro_scrapping()
 
+papa = 0
+
 @client.event
 
-async def on_message(message):
-    username = str(message.author).split('#')[0]
-    user_message = str(message.content)
-    channel = str(message.channel.name)
+async def on_message(ctx):
+    # username = ctx.message.author
+    user_message = ctx.content
+    channel = ctx.channel.name
+    message = ctx
+
     # print(f'{username}: {user_message}({channel})')
 #ponizej ladujemy sobie plik z memami
     #fileNameArray = [x for x in os.listdir("E:/memowo") if os.path.isfile(os.path.join("E:/memowo", x))]
@@ -71,8 +75,8 @@ async def on_message(message):
     #print(fileNameArray)
    # "C:/programowanko/memowo"
 
-    if message.author == client.user:  #bot nie odpowiada sam sobie
-        return
+    # if message.author == client.user:  #bot nie odpowiada sam sobie
+    #     return
 
 
     
@@ -82,17 +86,17 @@ async def on_message(message):
 
         
 
-    if message.channel.name == 'testy-bot':
-        if user_message.lower() == 'hello':
-            await message.channel.send(f'Hello {username}!')
-            return
-        elif user_message.lower() == 'bye':
-            await message.channel.send(f'See you later {username}!')
-            return
-        elif user_message.lower() == '!random':
-            response = f'This is your random number: {random.randrange(10000)}'
-            await message.channel.send(response)
-            return
+    # if message.channel.name == 'testy-bot':
+    #     if user_message.lower() == 'hello':
+    #         await message.channel.send(f'Hello {username}!')
+    #         return
+    #     elif user_message.lower() == 'bye':
+    #         await message.channel.send(f'See you later {username}!')
+    #         return
+    #     elif user_message.lower() == '!random':
+    #         response = f'This is your random number: {random.randrange(10000)}'
+    #         await message.channel.send(response)
+    #         return
 
     if user_message.lower() == '!pancerniaki':
         await message.channel.send(scrap.pancernioki())
@@ -193,6 +197,15 @@ async def on_message(message):
     if user_message.lower() == "!help":
         await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
+    global papa
+    if papa == 1:
+        papa = 0
+        sound = FFmpegPCMAudio(starting["shadow_sound1"])
+        await ctx.guild.voice_client.play(sound)
+
+
+
+
     await client.process_commands(message)
 
 
@@ -230,7 +243,7 @@ async def daty_godziny ():
     bot_test = client.get_channel(starting['bot_test'])
 
 
-    papa = 0
+    global papa
     while not client.is_closed():
         await asyncio.sleep(59)
 
@@ -242,23 +255,23 @@ async def daty_godziny ():
         dane_czas = godzina.split(':', 3)
         godz, minuta, sekunda = dane_czas
 
-        if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
+        if (int(godz) == 22) and (int(minuta) == 42) and papa == 0:
             pull = random.randint(1, 2)
             papa = 1
             if pull == 1:
-                @client.event
-                async def on_message(ctx):
-                    sound = FFmpegPCMAudio(starting["shadow_sound1"])
-                    await ctx.guild.voice_client.play(sound)
+                # @client.event
+                # async def on_message(ctx):
+                #     sound = FFmpegPCMAudio(starting["shadow_sound1"])
+                #     await ctx.guild.voice_client.play(sound)
                 await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
                 await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
 
 
             elif pull == 2:
-                @client.event
-                async def on_message(ctx):
-                    sound = FFmpegPCMAudio(starting["shadow_sound1"])
-                    await ctx.guild.voice_client.play(sound)
+                # @client.event
+                # async def on_message(ctx):
+                #     sound = FFmpegPCMAudio(starting["shadow_sound1"])
+                #     await ctx.guild.voice_client.play(sound)
                 await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
                 await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
                 time.sleep(1)
