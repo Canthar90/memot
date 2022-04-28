@@ -16,6 +16,7 @@ class Scrapping():
 
 
     def pancernioki(self):
+        """Simple scrapping for my father in law"""
         pancerniaki_response = requests.get("https://www.telemagazyn.pl/serial/czterej-pancerni-i-pies-553609/")
 
         pancerniaki_soup = BeautifulSoup(pancerniaki_response.text, "html.parser")
@@ -36,6 +37,7 @@ class Scrapping():
 
 
 class Allegro_scrapping():
+    """Scraping allegro with sellenium"""
     def __init__(self):
         try:
             with open("planned.json") as file:
@@ -117,6 +119,7 @@ class Allegro_scrapping():
             return message
 
     def single_search(self, fraze):
+        """Define how to act depending on passed input"""
         if len(fraze) == 1:
             message = self.search(search_word=fraze[0])
             return message

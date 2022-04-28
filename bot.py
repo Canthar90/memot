@@ -63,6 +63,7 @@ papa = 0
 @client.event
 
 async def on_message(ctx):
+    """Searching words in phrases"""
     # username = ctx.message.author
     user_message = ctx.content
     channel = ctx.channel.name
@@ -198,7 +199,7 @@ async def on_message(ctx):
         await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
     global papa
-    if papa == 1:
+    if papa == 1 and ctx.voice_client:
         papa = 0
         sound = FFmpegPCMAudio(starting["shadow_sound1"])
         await ctx.guild.voice_client.play(sound)
@@ -211,10 +212,12 @@ async def on_message(ctx):
 
 @client.command(pass_context=True)
 async def test(ctx):
+    """testing discord famework"""
     await ctx.send("testujemy")
 
 @client.command(pass_context=True)
 async def join(ctx):
+    """Joining the voice channel with intro"""
     if (ctx.author.voice):
         channel = ctx.author.voice.channel
         voice = await channel.connect(reconnect=False)
@@ -229,11 +232,13 @@ async def join(ctx):
 
 @client.command(pass_context=True)
 async def leave(ctx):
+    """leaving the voice channel"""
     if (ctx.voice_client):
         await ctx.guild.voice_client.disconnect()
 
 
 async def daty_godziny ():
+    """Managing time related events"""
 
     await client.wait_until_ready()
 

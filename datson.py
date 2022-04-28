@@ -3,11 +3,15 @@ import datetime as dt
 from datetime import datetime, timedelta
 
 class Garbagson():
+    """Checking if there are any upcoming garbage"""
+
     def __init__(self):
+        """loading base data"""
         with open("garbage.json") as file:
             self.garbage_dict = json.load(file)
 
     def trash_time(self):
+        """checking if there is any garbage upcoming in 7 days """
         current = dt.date.today()
         future = current + timedelta(days=7)
         empty = []

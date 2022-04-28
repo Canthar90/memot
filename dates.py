@@ -5,9 +5,11 @@ from datetime import timedelta
 
 class Garbage():
     def __init__(self):
+        """Initializing all data sets"""
         self.garbage_df = pd.read_csv("garbage.csv")
 
     def trash_time(self):
+        """Checking if in 7 days delta there are any garbage event coming then returning message"""
         # loading all columns to diffrent df to later sort it and create message
         self.garbage_df['Plastiki'] = pd.to_datetime(self.garbage_df['Plastiki'], dayfirst=True)
         self.garbage_df['Mieszane'] = pd.to_datetime(self.garbage_df['Mieszane'], dayfirst=True)

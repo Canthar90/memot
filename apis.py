@@ -6,13 +6,14 @@ import json
 
 class Weather_forecasting():
     def __init__(self):
+        """loading starting data files to dictionaries"""
         with open("places.json") as file:
             self.places = json.load(file)
         with open("starting.json") as start:
             self.starting = json.load(start)
 
     def weather_check(self):
-
+        """sending all city names from starting file to requesting function"""
         message = ''
         for city in self.places:
             message += self.requesting(city=city)
@@ -23,6 +24,7 @@ class Weather_forecasting():
 
 
     def requesting(self, city):
+        """Requesting and forming weather forecast message"""
         WEATHER_API = self.starting['weather_api']
         api_key = self.starting['weather_key']
         parameters = {
@@ -49,7 +51,7 @@ class Weather_forecasting():
                 gonna_rain = True
 
         if gonna_rain:
-            return (f"Prognoza pogody dla miasta {city}\n"
+            return (f"\nPrognoza pogody dla miasta {city}\n"
                         f"Obecna temperatura to: {weather_hourly[0]['temp']}, odczuwalna: {weather_hourly[0]['feels_like']}, "
                         f"ciśnienie: {weather_hourly[0]['pressure']}, widoczność: {weather_hourly[0]['visibility']}m, "
                         f"prędkość watru: {weather_hourly[0]['wind_speed']}km/h, UWAGA PADA DYSZCZ!!!!!! \n"
@@ -60,7 +62,7 @@ class Weather_forecasting():
 
 
         else:
-            return (f"Prognoza pogody dla miasta {city}\n"
+            return (f"\nPrognoza pogody dla miasta {city}\n"
                         f"Obecna temperatura to: {weather_hourly[0]['temp']}, odczuwalna: {weather_hourly[0]['feels_like']}, "
                         f"ciśnienie: {weather_hourly[0]['pressure']}, widoczność: {weather_hourly[0]['visibility']}m, "
                         f"prędkość watru: {weather_hourly[0]['wind_speed']}km/h, Nie pada,"
