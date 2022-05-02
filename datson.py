@@ -84,3 +84,7 @@ class Garbagson():
             return 'There is no upcoming garbage in next 7 days'
         else:
             return message
+
+class events():
+    """Class for dealing with custom one time events"""
+

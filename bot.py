@@ -64,10 +64,13 @@ papa = 0
 
 async def on_message(ctx):
     """Searching words in phrases"""
+
     # username = ctx.message.author
     user_message = ctx.content
     channel = ctx.channel.name
     message = ctx
+
+
 
     # print(f'{username}: {user_message}({channel})')
 #ponizej ladujemy sobie plik z memami
@@ -76,8 +79,8 @@ async def on_message(ctx):
     #print(fileNameArray)
    # "C:/programowanko/memowo"
 
-    # if message.author == client.user:  #bot nie odpowiada sam sobie
-    #     return
+    if message.author == client.user:  #bot nie odpowiada sam sobie
+        return
 
 
     
@@ -199,10 +202,11 @@ async def on_message(ctx):
         await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
     global papa
-    if papa == 1 and ctx.voice_client:
+    if papa == 1 and ctx.voice_client and message.author == client.user:
         papa = 0
         sound = FFmpegPCMAudio(starting["shadow_sound1"])
         await ctx.guild.voice_client.play(sound)
+
 
 
 
@@ -217,24 +221,77 @@ async def test(ctx):
 
 @client.command(pass_context=True)
 async def join(ctx):
-    """Joining the voice channel with intro"""
+    """Joining the voice channel"""
     if (ctx.author.voice):
         channel = ctx.author.voice.channel
-        voice = await channel.connect(reconnect=False)
-        source = FFmpegPCMAudio('./sounds/entry.mp3')
-        player = voice.play(source)
-        time.sleep(20)
+        await channel.connect(reconnect=False)
 
-        voice.stop()
 
     else:
         await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
+
+
+@client.command(pass_context=True)
+async def stop(ctx):
+    """Stops music that bot is playing"""
+    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    if voice.is_playing():
+        voice.stop()
+    else:
+        await ctx.send("Panie kochany ja obecnie nic nie gram")
+
+
+@client.command(pass_context=True)
+async def pause(ctx):
+    """Pause music that bot is playing"""
+    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    if voice.is_playing():
+        voice.pause()
+    else:
+        await ctx.send("Panie ja obecnie nic nie gram")
+
+
+@client.command(pass_contxt=True)
+async def resume(ctx):
+    """Resume music if bot is playing"""
+    voice = discord.utils.get(client.voice_clients, guild=ctx.guild)
+    if voice.is_paused():
+        voice.resume()
+    else:
+        await ctx.send("Panie ja nic nie mam zapałzowanego")
+
+
+@client.command(pass_context=True)
+async def narod(ctx):
+    """Plays on of the more controvelsial music pieces in polish culture"""
+    if (ctx.voice_client):
+        source = FFmpegPCMAudio(starting['shadow_sound2'])
+        await ctx.guild.voice_client.play(source)
+
+@client.command(pass_context=True)
+async def anthem1(ctx):
+    """Plays one of the deamed anthems"""
+    if (ctx.voice_client):
+        source = FFmpegPCMAudio(starting['shadow_anthem1'])
+        await ctx.guild.voice_client.play(source)
+
+
 
 @client.command(pass_context=True)
 async def leave(ctx):
     """leaving the voice channel"""
     if (ctx.voice_client):
         await ctx.guild.voice_client.disconnect()
+
+@client.command(pass_context=True)
+async def showid(ctx):
+    """Shows author id"""
+
+    global paczuchy, starting
+    channel = paczuchy.voice.channel
+    await ctx.channel.send(f"testujemy wiadomości {ctx.author.id}")
+    # await channel.connect(reconnect=False)
+
 
 
 async def daty_godziny ():
@@ -260,7 +317,7 @@ async def daty_godziny ():
         dane_czas = godzina.split(':', 3)
         godz, minuta, sekunda = dane_czas
 
-        if (int(godz) == 22) and (int(minuta) == 42) and papa == 0:
+        if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
             pull = random.randint(1, 2)
             papa = 1
             if pull == 1:
