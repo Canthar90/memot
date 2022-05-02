@@ -88,3 +88,29 @@ class Garbagson():
 class events():
     """Class for dealing with custom one time events"""
 
+    def __init__(self):
+        """Lauthing starting functions"""
+        self.load()
+
+
+    def load(self):
+        """Loading starting files if they exist"""
+        try:
+            with open("events.json") as file:
+                self.events_dict = json.load(file)
+        except:
+            self.events_dict = {}
+
+
+    def save(self):
+        """Saving dictionary to file"""
+        with open("events.json") as file:
+            json.dump(self.events_dict, file)
+
+
+    def add_event(self, date, description, channel):
+        """Adding event to events dictionary"""
+        self.events_dict[date] = [description, channel]
+
+
+
