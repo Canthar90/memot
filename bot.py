@@ -20,6 +20,15 @@ from discord import FFmpegPCMAudio
 with open("starting.json") as start:
     starting = json.load(start)
 
+queues = {}
+
+
+def check_queue(ctx, id):
+    if queues[id] != []:
+        voice = ctx.guild.voice_client
+        source = queues[id].pop(0)
+        player = voice.play(source)
+
 # TOKEN = 'token'
 TOKEN = starting['token']
 
@@ -88,19 +97,7 @@ async def on_message(ctx):
         await jarkendar.send('testowa wiadomość wywoływana wszędzie?')
 
 
-        
 
-    # if message.channel.name == 'testy-bot':
-    #     if user_message.lower() == 'hello':
-    #         await message.channel.send(f'Hello {username}!')
-    #         return
-    #     elif user_message.lower() == 'bye':
-    #         await message.channel.send(f'See you later {username}!')
-    #         return
-    #     elif user_message.lower() == '!random':
-    #         response = f'This is your random number: {random.randrange(10000)}'
-    #         await message.channel.send(response)
-    #         return
 
     if user_message.lower() == '!pancerniaki':
         await message.channel.send(scrap.pancernioki())
@@ -222,7 +219,7 @@ async def test(ctx):
 @client.command(pass_context=True)
 async def join(ctx):
     """Joining the voice channel"""
-    if (ctx.author.voice):
+    if ctx.author.voice:
         channel = ctx.author.voice.channel
         await channel.connect(reconnect=False)
 
@@ -275,6 +272,30 @@ async def anthem1(ctx):
         source = FFmpegPCMAudio(starting['shadow_anthem1'])
         await ctx.guild.voice_client.play(source)
 
+
+@client.command(pass_context=True)
+async def play(ctx, arg):
+    voice = ctx.guild.voice_client
+    song = starting[arg]
+    source = FFmpegPCMAudio(song)
+    player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
+
+
+@client.command(pass_context=True)
+async def queue(ctx, arg):
+    voice = ctx.guild.voice_client
+    song = starting[arg]
+    source = FFmpegPCMAudio(song)
+
+    guild_id = ctx.message.guild.id
+
+    if guild_id in queues:
+        queues[guild_id].append(source)
+
+    else:
+        queues[guild_id] = [source]
+
+    await ctx.send("Added to queue")
 
 
 @client.command(pass_context=True)
