@@ -32,7 +32,6 @@ class Scrapping():
                        f'Godzina emisji {temp[1]}\n' \
                        f'Odcinek {temp[2]}\n' \
                        f'Kanał {temp[5]} \n\n'
-        # print(temp)
         return message
 
 
@@ -68,7 +67,6 @@ class Allegro_scrapping():
         search_pole = driver.find_element(
             By.XPATH, "/html/body/div[3]/div[3]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input")
 
-        # /html/body/div[3]/div[3]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input
         action.click(on_element=search_pole)
         action.send_keys(search_word)
         action.key_down(Keys.ENTER)
@@ -99,7 +97,6 @@ class Allegro_scrapping():
             By.CSS_SELECTOR,
             """div div div div div div div div div div div div div div div section article div div div div div span._1svub._lf05o"""
         )
-
 
         if len(main_titles) == 0:
             return 'Sory nie mogę znaleźć wyników dla tego zapytania'

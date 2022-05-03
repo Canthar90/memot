@@ -108,9 +108,9 @@ class events():
             json.dump(self.events_dict, file)
 
 
-    def add_event(self, date, description, channel):
+    def add_event(self, date, title, channel):
         """Adding event to events dictionary"""
-        self.events_dict[date] = [description, channel]
+        self.events_dict[title] = [date, channel]
 
 
 

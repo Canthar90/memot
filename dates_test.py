@@ -31,28 +31,20 @@ gabaryt_df['gabaryt'] = garbage_df["Gabaryty"]
 popiol_df = pd.DataFrame()
 popiol_df['popiol'] = garbage_df['Popiol']
 
-
 date = dt.date.today()
 future = date + timedelta(days=7)
 print(f'current date is: {date}')
 
-
-# print(f"plastiki : {plastiki_df.head()}  ")
 future = future.strftime("%d/%m/%Y")
-
 date = date.strftime("%d/%m/%Y")
 
 message = 'Upcoming trash : \n '
 
 matching_plastik_df =plastiki_df[(plastiki_df.plastiki >= pd.to_datetime(date, dayfirst=True)) &
                                  (plastiki_df.plastiki <= pd.to_datetime(future, dayfirst=True))]
-
 if not matching_plastik_df.empty:
     message += f"Plastiki {matching_plastik_df.plastiki.dt.strftime('%d-%m-%Y').values[0]} " \
                f" it's: {(matching_plastik_df.plastiki.dt.day_name().values[0])} \n"
-
-# print(f'pasujące {matching_plastik_df}')
-# matching_plastik_df = matching_plastik_df[(plastiki_df.plastiki <= pd.to_datetime(future, dayfirst=True))]
 
 matching_mieszane_df = mieszane_df[(mieszane_df.mieszane >= pd.to_datetime(date, dayfirst=True)) &
                                    (mieszane_df.mieszane <= pd.to_datetime(future, dayfirst=True))]
@@ -61,10 +53,8 @@ if not matching_mieszane_df.empty:
                f"it's: {matching_mieszane_df.mieszane.dt.day_name().values[0]} \n"
 
 
-
 matching_bio_df = bio_df[(bio_df.bio >= pd.to_datetime(date, dayfirst=True)) &
                          (bio_df.bio <= pd.to_datetime(future, dayfirst=True))]
-
 if not matching_bio_df.empty:
     message += f"Bio {matching_bio_df.bio.dt.strftime('%d-%m-%Y').values[0]} " \
                f"it's: {matching_bio_df.bio.dt.day_name().values[0]} \n"
@@ -72,7 +62,6 @@ if not matching_bio_df.empty:
 
 matching_szklo_df = szklo_df[(szklo_df.szklo >= pd.to_datetime(date, dayfirst=True)) &
                              (szklo_df.szklo <= pd.to_datetime(future, dayfirst=True))]
-
 if not matching_szklo_df.empty:
     message += f"Szkło {matching_szklo_df.szklo.dt.strftime('%d-%m-%Y').values[0]} " \
                f"it's: {matching_szklo_df.szklo.dt.day_name().values[0]} \n"
@@ -86,7 +75,6 @@ if not matching_gabaryty_df.empty:
 
 matching_popiol_df = popiol_df[(popiol_df.popiol >= pd.to_datetime(date, dayfirst=True)) &
                               (popiol_df.popiol <= pd.to_datetime(future, dayfirst=True))]
-
 if not matching_popiol_df.empty:
     message += f"Popiół {matching_popiol_df.popiol.dt.strftime('%d-%m-%Y').values[0]} " \
                f"it's: {matching_popiol_df.popiol.dt.day_name().values[0]} \n"
@@ -94,7 +82,6 @@ if not matching_popiol_df.empty:
 
 
 print(f'pasujące {matching_plastik_df.plastiki.dt.day_name()} \n {matching_mieszane_df.mieszane.dt.strftime("%Y-%m-%d").values} \n {matching_gabaryty_df}')
-
 print(message)
 
 

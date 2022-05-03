@@ -1,19 +1,15 @@
 import os
 import random
-
 import time
 import logging
 from datetime import datetime
 import discord
-from discord import Game
-from discord.ext import commands, tasks
 from discord.ext.commands import Bot
 import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson
 from apis import Weather_forecasting
-import gc
 from discord import FFmpegPCMAudio
 
 
@@ -39,7 +35,7 @@ paczuchy = client.get_channel(starting["voice_channel"])
 logging.basicConfig(level=logging.INFO)
 
 
-@client.event  # oto element logujacy
+@client.event
 async def on_ready():
 
     logging.info('We are login as {0.user}'.format(client))
@@ -51,11 +47,8 @@ bot_test = client.get_channel(starting['bot_test'])
 
 
 me = starting['me']
-
 trash = Garbagson()
-
 allegros = Allegro_scrapping()
-
 papa = 0
 
 @client.event
@@ -66,19 +59,14 @@ async def on_message(ctx):
     user_message = ctx.content
     channel = ctx.channel.name
     message = ctx
-
     fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
-
 
     if message.author == client.user:  #bot nie odpowiada sam sobie
         return
 
 
-    
     if user_message.lower() == 'test':
         await jarkendar.send('testowa wiadomość wywoływana wszędzie?')
-
-
 
 
     if user_message.lower() == '!pancerniaki':
@@ -127,7 +115,6 @@ async def on_message(ctx):
                 await message.channel.send("Paaanie nie szalej pan")
             else:
                 for i in range(0,int(liczba)):
-                    # plik_spam = random.choice([x for x in os.listdir("E:\memowo") if os.path.isfile(os.path.join("E:\memowo", x))])
                     plik_spam = random.choice(fileNameArray)
                     de_cat_spam ='./memowo/'
                     plik2_spam = de_cat_spam+plik_spam
@@ -196,6 +183,7 @@ async def test(ctx):
     """testing discord famework"""
     await ctx.send("testujemy")
 
+
 @client.command(pass_context=True)
 async def join(ctx):
     """Joining the voice channel"""
@@ -243,6 +231,7 @@ async def narod(ctx):
         source = FFmpegPCMAudio(starting['shadow_sound2'])
         await ctx.guild.voice_client.play(source)
 
+
 @client.command(pass_context=True)
 async def anthem1(ctx):
     """Plays one of the deamed anthems"""
@@ -286,7 +275,6 @@ async def leave(ctx):
 @client.command(pass_context=True)
 async def showid(ctx):
     """Shows author id"""
-
     global paczuchy, starting
     channel = paczuchy.voice.channel
     await ctx.channel.send(f"testujemy wiadomości {ctx.author.id}")
@@ -294,7 +282,6 @@ async def showid(ctx):
 
 async def daty_godziny ():
     """Managing time related events"""
-
     await client.wait_until_ready()
 
     time.sleep(4)
@@ -306,7 +293,6 @@ async def daty_godziny ():
     global papa
     while not client.is_closed():
         await asyncio.sleep(59)
-
 
         now = datetime.now()
         timesdata = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -331,8 +317,10 @@ async def daty_godziny ():
         elif int(houer) == 21 and int(minnute) == 38:
             papa = 0
 
+
         if (int(houer) == 12 and int(minnute) == 0) or (int(houer) == 20 and int(minnute) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
+
 
         if int(houer) == 6 and int(minnute) == 0:
             await bot_test.send(weather.weather_check())
