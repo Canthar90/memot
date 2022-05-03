@@ -22,17 +22,14 @@ with open("starting.json") as start:
 
 queues = {}
 
-
 def check_queue(ctx, id):
     if queues[id] != []:
         voice = ctx.guild.voice_client
         source = queues[id].pop(0)
         player = voice.play(source)
 
-# TOKEN = 'token'
 TOKEN = starting['token']
 
-# client = discord.Client()
 client = Bot('!')
 
 scrap = Scrapping()
@@ -46,14 +43,6 @@ logging.basicConfig(level=logging.INFO)
 async def on_ready():
 
     logging.info('We are login as {0.user}'.format(client))
-    # await paczuchy.connect()
-
-
-
-
-
-
-
 
 
 jarkendar = client.get_channel(starting['jarkendar'])
@@ -74,19 +63,12 @@ papa = 0
 async def on_message(ctx):
     """Searching words in phrases"""
 
-    # username = ctx.message.author
     user_message = ctx.content
     channel = ctx.channel.name
     message = ctx
 
-
-
-    # print(f'{username}: {user_message}({channel})')
-#ponizej ladujemy sobie plik z memami
-    #fileNameArray = [x for x in os.listdir("E:/memowo") if os.path.isfile(os.path.join("E:/memowo", x))]
     fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
-    #print(fileNameArray)
-   # "C:/programowanko/memowo"
+
 
     if message.author == client.user:  #bot nie odpowiada sam sobie
         return
@@ -206,8 +188,6 @@ async def on_message(ctx):
 
 
 
-
-
     await client.process_commands(message)
 
 
@@ -222,8 +202,6 @@ async def join(ctx):
     if ctx.author.voice:
         channel = ctx.author.voice.channel
         await channel.connect(reconnect=False)
-
-
     else:
         await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
 
@@ -304,6 +282,7 @@ async def leave(ctx):
     if (ctx.voice_client):
         await ctx.guild.voice_client.disconnect()
 
+
 @client.command(pass_context=True)
 async def showid(ctx):
     """Shows author id"""
@@ -311,8 +290,6 @@ async def showid(ctx):
     global paczuchy, starting
     channel = paczuchy.voice.channel
     await ctx.channel.send(f"testujemy wiadomości {ctx.author.id}")
-    # await channel.connect(reconnect=False)
-
 
 
 async def daty_godziny ():
@@ -332,48 +309,36 @@ async def daty_godziny ():
 
 
         now = datetime.now()
-        dataczas = now.strftime("%d/%m/%Y %H:%M:%S")
-        czass = dataczas.split(' ', 2)
-        data, godzina = czass
-        dane_czas = godzina.split(':', 3)
-        godz, minuta, sekunda = dane_czas
+        timesdata = now.strftime("%d/%m/%Y %H:%M:%S")
+        curr_time = timesdata.split(' ', 2)
+        date, clock = curr_time
+        dane_czas = clock.split(':', 3)
+        houer, minnute, sec = dane_czas
 
-        if (int(godz) == 21) and (int(minuta) == 37) and papa == 0:
+        if (int(houer) == 21) and (int(minnute) == 37) and papa == 0:
             pull = random.randint(1, 2)
             papa = 1
             if pull == 1:
-                # @client.event
-                # async def on_message(ctx):
-                #     sound = FFmpegPCMAudio(starting["shadow_sound1"])
-                #     await ctx.guild.voice_client.play(sound)
                 await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
                 await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
-
-
             elif pull == 2:
-                # @client.event
-                # async def on_message(ctx):
-                #     sound = FFmpegPCMAudio(starting["shadow_sound1"])
-                #     await ctx.guild.voice_client.play(sound)
                 await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
                 await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
                 time.sleep(1)
                 await samo_jedzonko.send('OOO Papierzu Boże Imperatorze przybądź !!!!')
                 time.sleep(3)
                 await samo_jedzonko.send(file=discord.File('./specjal/papemperor1.jpg'))
-
-
-        elif int(godz)==21 and int(minuta)==38:
+        elif int(houer) == 21 and int(minnute) == 38:
             papa = 0
 
-        if (int(godz) == 12 and int(minuta) == 0) or (int(godz) == 20 and int(minuta) == 0):
+        if (int(houer) == 12 and int(minnute) == 0) or (int(houer) == 20 and int(minnute) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
 
-        if int(godz) == 6 and int(minuta) == 0:
+        if int(houer) == 6 and int(minnute) == 0:
             await bot_test.send(weather.weather_check())
 
 
-        if int(godz) == 3 and int(minuta) == 50:
+        if (int(houer) == 3) and (int(minnute) == 50):
             await jarkendar.send(weather.requesting(starting['home']))
             await jarkendar.send(weather.requesting(starting['work']))
 
