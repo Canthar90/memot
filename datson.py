@@ -111,6 +111,23 @@ class events():
     def add_event(self, date, title, channel):
         """Adding event to events dictionary"""
         self.events_dict[title] = [date, channel]
+        return "Event added"
 
 
+    def event_detection(self):
+        """detect if there is any events upcoming"""
+        if not self.events_dict:
+            return
+        else:
+            matching_event_dict = {}
+            current_time = dt.date.today()
+            future = current_time + timedelta(days=7)
+            for key in self.events_dict:
+                event_time = datetime.strptime(self.events_dict[key][0], "%Y-%m-%d")
+                if event_time >= current_time and event_time <= future:
+                    matching_event_dict[key] = self.events_dict[key]
 
+            if matching_event_dict:
+                return matching_event_dict
+            else:
+                return
