@@ -8,7 +8,7 @@ from discord.ext.commands import Bot
 import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
-from datson import Garbagson
+from datson import Garbagson, Events
 from apis import Weather_forecasting
 from discord import FFmpegPCMAudio
 
@@ -45,6 +45,7 @@ jarkendar = client.get_channel(starting['jarkendar'])
 samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
 bot_test = client.get_channel(starting['bot_test'])
 
+events = Events()
 
 me = starting['me']
 trash = Garbagson()
@@ -60,8 +61,8 @@ async def on_message(ctx):
     channel = ctx.channel.name
     message = ctx
     fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
-
-    if message.author == client.user:  #bot nie odpowiada sam sobie
+    global papa
+    if message.author == client.user and not papa == 1:
         return
 
 
@@ -167,11 +168,13 @@ async def on_message(ctx):
     if user_message.lower() == "!help":
         await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
-    global papa
-    if papa == 1 and ctx.voice_client and message.author == client.user:
-        papa = 0
-        sound = FFmpegPCMAudio(starting["shadow_sound1"])
-        await ctx.guild.voice_client.play(sound)
+
+    if papa == 1 and message.author == client.user:
+        if ctx.guild.voice_client:
+            ctx.guild.voice_client.stop()
+            papa = 0
+            sound = FFmpegPCMAudio(starting["shadow_sound1"])
+            await ctx.guild.voice_client.play(sound)
 
 
 
@@ -273,11 +276,41 @@ async def leave(ctx):
 
 
 @client.command(pass_context=True)
-async def showid(ctx):
+async def showid(ctx, arg1, arg2):
     """Shows author id"""
     global paczuchy, starting
-    channel = paczuchy.voice.channel
+    # channel = paczuchy.voice.channel
     await ctx.channel.send(f"testujemy wiadomości {ctx.author.id}")
+    print(arg1)
+    print(arg2)
+
+
+@client.command(pass_context=True)
+async def add_events(ctx, arg1, arg2):
+    """Adding custom event from events class"""
+
+    list = str(arg1).split('_')
+    title = ''
+    for elem in list:
+        title += elem + ' '
+    date = arg2
+    channel = ctx.channel.id
+    await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
+
+
+@client.command(pass_context=True)
+async def check_events(ctx):
+    """Checking if there are any event upcoming"""
+
+    flag, mathing_events = events.event_detection()
+    if flag:
+        for key in mathing_events:
+            channel = client.get_channel(mathing_events[key][1])
+            date = mathing_events[key][0]
+            await channel.send(f"Uwaga!! {key}, o {date}")
+    else:
+        await ctx.channel.send("nie ma żadnych nadchodzących eventów ")
+
 
 
 async def daty_godziny ():
@@ -320,6 +353,14 @@ async def daty_godziny ():
 
         if (int(houer) == 12 and int(minnute) == 0) or (int(houer) == 20 and int(minnute) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
+            flag, mathing_events = events.event_detection()
+            if flag:
+                for key in mathing_events:
+                    channel = client.get_channel(mathing_events[key][1])
+                    date = mathing_events[key][0]
+                    await channel.send(f"Uwaga!! {key}, o {date}")
+            else:
+                pass
 
 
         if int(houer) == 6 and int(minnute) == 0:
