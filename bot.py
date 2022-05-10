@@ -245,6 +245,7 @@ async def anthem1(ctx):
 
 @client.command(pass_context=True)
 async def play(ctx, arg):
+    """Plays song by title"""
     voice = ctx.guild.voice_client
     song = starting[arg]
     source = FFmpegPCMAudio(song)
@@ -253,6 +254,7 @@ async def play(ctx, arg):
 
 @client.command(pass_context=True)
 async def queue(ctx, arg):
+    """adding song to queue"""
     voice = ctx.guild.voice_client
     song = starting[arg]
     source = FFmpegPCMAudio(song)
