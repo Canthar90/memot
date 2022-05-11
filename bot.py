@@ -66,18 +66,6 @@ async def on_message(ctx):
         return
 
 
-    if user_message.lower() == 'test':
-        await jarkendar.send('testowa wiadomość wywoływana wszędzie?')
-
-
-    if user_message.lower() == '!pancerniaki':
-        await message.channel.send(scrap.pancernioki())
-
-    if user_message.lower() == '!anywhere':
-        await message.channel.send('this can be used anywhere!')
-        return
-                            
-
     if user_message.lower() == '!mem':
         plik = random.choice(fileNameArray)
         de_cat = "./memowo/"
@@ -145,10 +133,6 @@ async def on_message(ctx):
         await message.channel.send('Ironiczny. Mógł uratować innych od śmierci, ale nie siebie.')
 
 
-    if user_message.lower() == '!śmieci':
-        await message.channel.send(f'%s\n {trash.trash_time()}' % me)
-
-
     if '!asearch' in user_message.lower():
         fraze = user_message.split(',')
         fraze = [elem.strip() for elem in fraze]
@@ -165,8 +149,6 @@ async def on_message(ctx):
     elif '!forecast' in user_message.lower() and user_message == '!forecast':
         await message.channel.send(weather.weather_check())
 
-    if user_message.lower() == "!help":
-        await message.channel.send(f"{starting['help_base']} \n{starting['help_asearch']} \n{starting['help_forecast']}")
 
 
     if papa == 1 and message.author == client.user:
@@ -179,6 +161,17 @@ async def on_message(ctx):
 
 
     await client.process_commands(message)
+
+@client.command(pass_context=True)
+async def pancerniaki(ctx):
+    """checks dates of 5 next seances of 4 pancerni i pies in polish television"""
+    await ctx.send(scrap.pancernioki())
+
+
+@client.command(pass_context=True)
+async def garbage(ctx):
+    """checks if there is any garbage upcoming in next 7 days"""
+    await ctx.send(f'%s\n {trash.trash_time()}' % me)
 
 
 @client.command(pass_context=True)
