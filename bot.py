@@ -52,6 +52,8 @@ trash = Garbagson()
 allegros = Allegro_scrapping()
 papa = 0
 
+fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
+
 @client.event
 
 async def on_message(ctx):
@@ -60,17 +62,11 @@ async def on_message(ctx):
     user_message = ctx.content
     channel = ctx.channel.name
     message = ctx
-    fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
+
     global papa
     if message.author == client.user and not papa == 1:
         return
 
-
-    if user_message.lower() == '!mem':
-        plik = random.choice(fileNameArray)
-        de_cat = "./memowo/"
-        plik2 = de_cat+plik
-        await message.channel.send(file=discord.File(plik2))
     elif user_message.lower() == '!apmf':
         await message.channel.send('Maxujesz e generalnie połkujesz z e nie zbliżając się')
         await message.channel.send('Pierwszy item łezka da ci mane na spam. Grasz przede wszystkim bezpiecznie')
@@ -94,20 +90,6 @@ async def on_message(ctx):
         time.sleep(2)
         await message.channel.send('JAK GO POTRZEBA TO KURWA NIGDY GO NIE MA SPOK ZJEBALES')
 
-    
-    if '!spam' in testowystr:
-        lista = user_message.split()
-        komenda, liczba = lista
-
-        if komenda.lower() == '!spam' :
-            if int(liczba) > 10:
-                await message.channel.send("Paaanie nie szalej pan")
-            else:
-                for i in range(0,int(liczba)):
-                    plik_spam = random.choice(fileNameArray)
-                    de_cat_spam ='./memowo/'
-                    plik2_spam = de_cat_spam+plik_spam
-                    await message.channel.send(file=discord.File(plik2_spam))
 
     if ('linux' in testowystr) or ('ubuntu' in testowystr) or ('linuks' in testowystr):
         time.sleep(3)
@@ -161,6 +143,26 @@ async def on_message(ctx):
 
 
     await client.process_commands(message)
+
+@client.command(pass_context=True)
+async def mem(ctx):
+    """Sends one random meme"""
+    file_part = random.choice(fileNameArray)
+    base = "./memowo/"
+    file_final = base + file_part
+    await ctx.send(file=discord.File(file_final))
+
+
+@client.command(pass_context=True)
+async def spam(ctx, number):
+    """Sending number of memes, max number 10"""
+    if int(number) <= 10:
+        for i in range(0, int(number)):
+            file_part = random.choice(fileNameArray)
+            base = "./memowo/"
+            file_final = base + file_part
+            await ctx.send(file=discord.File(file_final))
+
 
 @client.command(pass_context=True)
 async def pancerniaki(ctx):
@@ -274,7 +276,6 @@ async def leave(ctx):
 async def showid(ctx, arg1, arg2):
     """Shows author id"""
     global paczuchy, starting
-    # channel = paczuchy.voice.channel
     await ctx.channel.send(f"testujemy wiadomości {ctx.author.id}")
     print(arg1)
     print(arg2)
