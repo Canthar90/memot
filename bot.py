@@ -169,18 +169,15 @@ async def pancerniaki(ctx):
     """checks dates of 5 next seances of 4 pancerni i pies in polish television"""
     await ctx.send(scrap.pancernioki())
 
-
 @client.command(pass_context=True)
 async def garbage(ctx):
     """checks if there is any garbage upcoming in next 7 days"""
     await ctx.send(f'%s\n {trash.trash_time()}' % me)
 
-
 @client.command(pass_context=True)
 async def test(ctx):
     """testing discord famework"""
     await ctx.send("testujemy")
-
 
 @client.command(pass_context=True)
 async def join(ctx):
@@ -191,7 +188,6 @@ async def join(ctx):
     else:
         await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
 
-
 @client.command(pass_context=True)
 async def stop(ctx):
     """Stops music that bot is playing"""
@@ -200,7 +196,6 @@ async def stop(ctx):
         voice.stop()
     else:
         await ctx.send("Panie kochany ja obecnie nic nie gram")
-
 
 @client.command(pass_context=True)
 async def pause(ctx):
@@ -211,7 +206,6 @@ async def pause(ctx):
     else:
         await ctx.send("Panie ja obecnie nic nie gram")
 
-
 @client.command(pass_contxt=True)
 async def resume(ctx):
     """Resume music if bot is playing"""
@@ -221,22 +215,33 @@ async def resume(ctx):
     else:
         await ctx.send("Panie ja nic nie mam zapałzowanego")
 
+@client.command(pass_context=True)
+async def gaz(ctx):
+    """Plays legendary polish discopolo music about fast cars"""
+    if ctx.voice_client:
+        source = FFmpegPCMAudio(starting["gaz"])
+        await ctx.guild.voice_client.play(source)
 
 @client.command(pass_context=True)
 async def narod(ctx):
     """Plays on of the more controvelsial music pieces in polish culture"""
     if (ctx.voice_client):
-        source = FFmpegPCMAudio(starting['shadow_sound2'])
+        source = FFmpegPCMAudio(starting['narod'])
         await ctx.guild.voice_client.play(source)
-
 
 @client.command(pass_context=True)
 async def anthem1(ctx):
     """Plays one of the deamed anthems"""
     if (ctx.voice_client):
-        source = FFmpegPCMAudio(starting['shadow_anthem1'])
+        source = FFmpegPCMAudio(starting['anthem1'])
         await ctx.guild.voice_client.play(source)
 
+@client.command(pass_context=True)
+async def anthem2(ctx):
+    """Plays second of the deamed anthems"""
+    if ctx.voice_client:
+        source = FFmpegPCMAudio(starting['anthem2'])
+        await ctx.guild.voice_client.play(source)
 
 @client.command(pass_context=True)
 async def play(ctx, arg):
@@ -246,22 +251,18 @@ async def play(ctx, arg):
     source = FFmpegPCMAudio(song)
     player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
 
-
 @client.command(pass_context=True)
 async def queue(ctx, arg):
     """adding song to queue"""
     voice = ctx.guild.voice_client
     song = starting[arg]
     source = FFmpegPCMAudio(song)
-
     guild_id = ctx.message.guild.id
 
     if guild_id in queues:
         queues[guild_id].append(source)
-
     else:
         queues[guild_id] = [source]
-
     await ctx.send("Added to queue")
 
 
@@ -284,7 +285,6 @@ async def showid(ctx, arg1, arg2):
 @client.command(pass_context=True)
 async def add_events(ctx, arg1, arg2):
     """Adding custom event from events class"""
-
     list = str(arg1).split('_')
     title = ''
     for elem in list:
@@ -297,7 +297,6 @@ async def add_events(ctx, arg1, arg2):
 @client.command(pass_context=True)
 async def check_events(ctx):
     """Checking if there are any event upcoming"""
-
     flag, mathing_events = events.event_detection()
     if flag:
         for key in mathing_events:
@@ -306,7 +305,6 @@ async def check_events(ctx):
             await channel.send(f"Uwaga!! {key}, o {date}")
     else:
         await ctx.channel.send("nie ma żadnych nadchodzących eventów ")
-
 
 
 async def daty_godziny ():
