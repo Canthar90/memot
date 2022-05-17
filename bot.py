@@ -8,7 +8,7 @@ from discord.ext.commands import Bot
 import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
-from datson import Garbagson, Events
+from datson import Garbagson, Events, CyclicEvents
 from apis import Weather_forecasting
 from discord import FFmpegPCMAudio
 
@@ -23,6 +23,14 @@ def check_queue(ctx, id):
         voice = ctx.guild.voice_client
         source = queues[id].pop(0)
         player = voice.play(source)
+
+def get_together(sentence):
+    """Refactoring statements from snake case to normal text string"""
+    list = str(sentence).split('_')
+    title = ''
+    for elem in list:
+        title += elem + ' '
+    return title
 
 TOKEN = starting['token']
 
@@ -46,6 +54,8 @@ samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
 bot_test = client.get_channel(starting['bot_test'])
 
 events = Events()
+
+cyclic = CyclicEvents()
 
 me = starting['me']
 trash = Garbagson()
@@ -137,7 +147,7 @@ async def on_message(ctx):
         if ctx.guild.voice_client:
             ctx.guild.voice_client.stop()
             papa = 0
-            sound = FFmpegPCMAudio(starting["shadow_sound1"])
+            sound = FFmpegPCMAudio(starting["barka"])
             await ctx.guild.voice_client.play(sound)
 
 
@@ -223,16 +233,37 @@ async def gaz(ctx):
         await ctx.guild.voice_client.play(source)
 
 @client.command(pass_context=True)
+async def soap(ctx):
+    """Plays legendary polish song about some soap"""
+    if ctx.voice_client:
+        source = FFmpegPCMAudio(starting['soap'])
+        await ctx.guild.voice_client.play(source)
+
+@client.command(pass_context=True)
+async def faast(ctx):
+    """Plays gonna go fast theme"""
+    if ctx.voice_client:
+        source = FFmpegPCMAudio(starting['faast'])
+        await ctx.guild.voice_client.play(source)
+
+@client.command(pass_context=True)
+async def hess(ctx):
+    """Plays song in honor of some guy"""
+    if ctx.voice_client:
+        source = FFmpegPCMAudio(starting['hess'])
+        await ctx.guild.voice_client.play(source)
+
+@client.command(pass_context=True)
 async def narod(ctx):
     """Plays on of the more controvelsial music pieces in polish culture"""
-    if (ctx.voice_client):
+    if ctx.voice_client:
         source = FFmpegPCMAudio(starting['narod'])
         await ctx.guild.voice_client.play(source)
 
 @client.command(pass_context=True)
 async def anthem1(ctx):
     """Plays one of the deamed anthems"""
-    if (ctx.voice_client):
+    if ctx.voice_client:
         source = FFmpegPCMAudio(starting['anthem1'])
         await ctx.guild.voice_client.play(source)
 
@@ -265,13 +296,11 @@ async def queue(ctx, arg):
         queues[guild_id] = [source]
     await ctx.send("Added to queue")
 
-
 @client.command(pass_context=True)
 async def leave(ctx):
     """leaving the voice channel"""
-    if (ctx.voice_client):
+    if ctx.voice_client:
         await ctx.guild.voice_client.disconnect()
-
 
 @client.command(pass_context=True)
 async def showid(ctx, arg1, arg2):
@@ -281,18 +310,13 @@ async def showid(ctx, arg1, arg2):
     print(arg1)
     print(arg2)
 
-
 @client.command(pass_context=True)
 async def add_events(ctx, arg1, arg2):
     """Adding custom event from events class"""
-    list = str(arg1).split('_')
-    title = ''
-    for elem in list:
-        title += elem + ' '
+    title = get_together(sentence=arg1)
     date = arg2
     channel = ctx.channel.id
     await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
-
 
 @client.command(pass_context=True)
 async def check_events(ctx):
@@ -306,6 +330,25 @@ async def check_events(ctx):
     else:
         await ctx.channel.send("nie ma żadnych nadchodzących eventów ")
 
+@client.command(pass_context=True)
+async def check_cyclic(ctx):
+    """Checks if there are any cyclic events upcoming"""
+    flag, mathing_events = cyclic.event_detection()
+    if flag:
+        for key in mathing_events:
+            channel = client.get_channel(mathing_events[key][1])
+            date = mathing_events[key][0]
+            await channel.send(f"Uwaga!! {key} o {date}")
+    else:
+        await ctx.channel.send("Nie nadchodzą żadne wydarzenia")
+
+@client.command(pass_context=True)
+async def add_cyclic(ctx, arg1, arg2):
+    """Adds cyclic event like birthday"""
+    title = get_together(sentence=arg1)
+    date = arg2
+    channel = ctx.channel.id
+    await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
 
 async def daty_godziny ():
     """Managing time related events"""

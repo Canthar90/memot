@@ -2,6 +2,7 @@ import json
 import datetime as dt
 from datetime import datetime, timedelta
 
+
 class Garbagson():
     """Checking if there are any upcoming garbage"""
 
@@ -46,8 +47,6 @@ class Garbagson():
             new = datetime.strptime(elem, '%d/%m/%Y')
             popioły_dt.append(new.date())
 
-
-
         message = 'Upcoming garbage: \n'
 
         matching_gabaryty = [gabaryt for gabaryt in gabaryty_dt if (gabaryt >= current) and (gabaryt <= future)]
@@ -85,14 +84,13 @@ class Garbagson():
         else:
             return message
 
+
 class Events():
     """Class for dealing with custom one time events"""
-
 
     def __init__(self):
         """Lauthing starting functions"""
         self.load()
-
 
     def load(self):
         """Loading starting files if they exist"""
@@ -102,19 +100,16 @@ class Events():
         except:
             self.events_dict = {}
 
-
     def save(self):
         """Saving dictionary to file"""
         with open("events.json", "w") as file:
             json.dump(self.events_dict, file)
-
 
     def add_event(self, date, title, channel):
         """Adding event to events dictionary"""
         self.events_dict[title] = [date, channel]
         self.save()
         return "Event added"
-
 
     def event_detection(self):
         """detect if there is any events upcoming"""
@@ -131,5 +126,50 @@ class Events():
 
             if matching_event_dict:
                 return True, matching_event_dict
+            else:
+                return False, {}
+
+
+class CyclicEvents():
+    """Class holding cyclic events like birthdays for example date"""
+
+    def __init__(self):
+        self.load()
+
+    def load(self):
+        """Loading data files if file is empty will make empty dictionary"""
+        try:
+            with open('cyclic_events.json') as file:
+                self.cyclic_events = json.load(file)
+        except:
+            self.cyclic_events = {}
+
+    def save(self):
+        """Saving dictionary do file"""
+        with open('cyclic_events.json', "w") as file:
+            json.dump(self.cyclic_events, file)
+
+    def add_item(self, date, title, channel):
+        """Adds new item cyclic item"""
+        self.cyclic_events[title] = [date, channel]
+        self.save()
+        return "Cyclic event added"
+
+    def event_detection(self):
+        """Detects if there is any event coming soon"""
+        if not self.cyclic_events:
+            return False, {}
+        else:
+            matching_dict = {}
+            current_time = dt.date.today()
+            future = current_time + timedelta(days=14)
+            for key in self.cyclic_events:
+                event_time = datetime.strptime(
+                    (f"{datetime.strftime(dt.datetime.today(), format('%Y'))}-{self.cyclic_events[key][0]}"),
+                    format("%Y-%m-%d")).date()
+                if (event_time >= current_time) and (event_time <= future):
+                    matching_dict[key] = self.cyclic_events[key]
+            if matching_dict:
+                return True, matching_dict
             else:
                 return False, {}
