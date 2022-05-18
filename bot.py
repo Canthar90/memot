@@ -32,6 +32,12 @@ def get_together(sentence):
         title += elem + ' '
     return title
 
+async def play_thing(ctx, id):
+    """Plays passed song if bot is placed in voice channel"""
+    if ctx.voice_client:
+        source = FFmpegPCMAudio(starting[id])
+        await ctx.guild.voice_client.play(source)
+
 TOKEN = starting['token']
 
 client = Bot('!')
@@ -228,51 +234,42 @@ async def resume(ctx):
 @client.command(pass_context=True)
 async def gaz(ctx):
     """Plays legendary polish discopolo music about fast cars"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting["gaz"])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="gaz")
 
 @client.command(pass_context=True)
 async def soap(ctx):
     """Plays legendary polish song about some soap"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting['soap'])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="soap")
 
 @client.command(pass_context=True)
 async def faast(ctx):
     """Plays gonna go fast theme"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting['faast'])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="faast")
 
 @client.command(pass_context=True)
 async def hess(ctx):
     """Plays song in honor of some guy"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting['hess'])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="hess")
 
 @client.command(pass_context=True)
 async def narod(ctx):
     """Plays on of the more controvelsial music pieces in polish culture"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting['narod'])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="narod")
 
 @client.command(pass_context=True)
 async def anthem1(ctx):
     """Plays one of the deamed anthems"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting['anthem1'])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="anthem1")
 
 @client.command(pass_context=True)
 async def anthem2(ctx):
     """Plays second of the deamed anthems"""
-    if ctx.voice_client:
-        source = FFmpegPCMAudio(starting['anthem2'])
-        await ctx.guild.voice_client.play(source)
+    await play_thing(ctx=ctx, id="anthem2")
+
+@client.command(pass_context=True)
+async def jtheme(ctx):
+    """Plays Theme from great cartoon"""
+    await play_thing(ctx=ctx, id="jtheme")
 
 @client.command(pass_context=True)
 async def play(ctx, arg):
