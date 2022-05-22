@@ -22,7 +22,6 @@ def check_queue(ctx, id):
     if queues[id] != []:
         voice = ctx.guild.voice_client
         source = queues[id].pop(0)
-        print(queues)
         player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
 
 def get_together(sentence):
@@ -283,7 +282,6 @@ async def play(ctx, arg):
 @client.command(pass_context=True)
 async def queue(ctx, *args):
     """adding song to queue"""
-    print(args)
     for arg in args:
         voice = ctx.guild.voice_client
         song = starting[arg]
@@ -292,7 +290,6 @@ async def queue(ctx, *args):
 
         if guild_id in queues:
             queues[guild_id].append(source)
-            print(queues)
         else:
             queues[guild_id] = [source]
     await ctx.send("Added to queue")
