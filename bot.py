@@ -22,7 +22,8 @@ def check_queue(ctx, id):
     if queues[id] != []:
         voice = ctx.guild.voice_client
         source = queues[id].pop(0)
-        player = voice.play(source)
+        print(queues)
+        player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
 
 def get_together(sentence):
     """Refactoring statements from snake case to normal text string"""
@@ -280,17 +281,20 @@ async def play(ctx, arg):
     player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
 
 @client.command(pass_context=True)
-async def queue(ctx, arg):
+async def queue(ctx, *args):
     """adding song to queue"""
-    voice = ctx.guild.voice_client
-    song = starting[arg]
-    source = FFmpegPCMAudio(song)
-    guild_id = ctx.message.guild.id
+    print(args)
+    for arg in args:
+        voice = ctx.guild.voice_client
+        song = starting[arg]
+        source = FFmpegPCMAudio(song)
+        guild_id = ctx.message.guild.id
 
-    if guild_id in queues:
-        queues[guild_id].append(source)
-    else:
-        queues[guild_id] = [source]
+        if guild_id in queues:
+            queues[guild_id].append(source)
+            print(queues)
+        else:
+            queues[guild_id] = [source]
     await ctx.send("Added to queue")
 
 @client.command(pass_context=True)
@@ -406,6 +410,5 @@ async def daty_godziny ():
             await jarkendar.send(weather.requesting(starting['work']))
 
 client.loop.create_task(daty_godziny())
-
 client.run(TOKEN)
 
