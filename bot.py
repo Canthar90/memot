@@ -38,6 +38,20 @@ async def play_thing(ctx, id):
         source = FFmpegPCMAudio(starting[id])
         await ctx.guild.voice_client.play(source)
 
+async def queueing(ctx, *args):
+    """Adding items to queue"""
+    for arg in args:
+        voice = ctx.guild.voice_client
+        song = starting[arg]
+        source = FFmpegPCMAudio(song)
+        guild_id = ctx.message.guild.id
+
+        if guild_id in queues:
+            queues[guild_id].append(source)
+        else:
+            queues[guild_id] = [source]
+    await ctx.send("Added to queue")
+
 TOKEN = starting['token']
 
 client = Bot('!')
@@ -272,27 +286,28 @@ async def jtheme(ctx):
     await play_thing(ctx=ctx, id="jtheme")
 
 @client.command(pass_context=True)
-async def play(ctx, arg):
+async def szanty(ctx):
+    """Makes sailors songs playlist"""
+    argi = ['bitwa', 'dziewczyny']
+    await queueing(ctx, *argi)
+    check_queue(ctx, ctx.message.guild.id)
+
+@client.command(pass_context=True)
+async def play(ctx, arg=''):
     """Plays song by title"""
-    voice = ctx.guild.voice_client
-    song = starting[arg]
-    source = FFmpegPCMAudio(song)
-    player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
+    if arg == '':
+        check_queue(ctx, ctx.message.guild.id)
+    else:
+        voice = ctx.guild.voice_client
+        song = starting[arg]
+        source = FFmpegPCMAudio(song)
+        player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
 
 @client.command(pass_context=True)
 async def queue(ctx, *args):
     """adding song to queue"""
-    for arg in args:
-        voice = ctx.guild.voice_client
-        song = starting[arg]
-        source = FFmpegPCMAudio(song)
-        guild_id = ctx.message.guild.id
-
-        if guild_id in queues:
-            queues[guild_id].append(source)
-        else:
-            queues[guild_id] = [source]
-    await ctx.send("Added to queue")
+    argi = list(args)
+    await queueing(ctx, *argi)
 
 @client.command(pass_context=True)
 async def leave(ctx):
