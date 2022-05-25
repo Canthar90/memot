@@ -18,26 +18,30 @@ with open("starting.json") as start:
 
 queues = {}
 
-def check_queue(ctx, id):
+
+def check_queue(ctx, channel_id):
     if queues:
-        if queues[id] != []:
+        if queues[channel_id]:
             voice = ctx.guild.voice_client
-            source = queues[id].pop(0)
-            player = voice.play(source, after=lambda x=None: check_queue(ctx, id))
+            source = queues[channel_id].pop(0)
+            player = voice.play(source, after=lambda x=None: check_queue(ctx, channel_id))
+
 
 def get_together(sentence):
     """Refactoring statements from snake case to normal text string"""
-    list = str(sentence).split('_')
+    item_list = str(sentence).split('_')
     title = ''
-    for elem in list:
+    for elem in item_list:
         title += elem + ' '
     return title
 
-async def play_thing(ctx, id):
+
+async def play_thing(ctx, song_id):
     """Plays passed song if bot is placed in voice channel"""
     if ctx.voice_client:
-        source = FFmpegPCMAudio(starting[id])
+        source = FFmpegPCMAudio(starting[song_id])
         await ctx.guild.voice_client.play(source)
+
 
 async def queueing(ctx, *args):
     """Adding items to queue"""
@@ -85,8 +89,8 @@ papa = 0
 
 fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
 
-@client.event
 
+@client.event
 async def on_message(ctx):
     """Searching words in phrases"""
 
@@ -102,12 +106,16 @@ async def on_message(ctx):
         await message.channel.send('Maxujesz e generalnie połkujesz z e nie zbliżając się')
         await message.channel.send('Pierwszy item łezka da ci mane na spam. Grasz przede wszystkim bezpiecznie')
         await message.channel.send('wykańczasz ich za pomocą E')
-        await message.channel.send('itemy buty skrucone cd jasności umysłu jako druie jako trzecie najlepszy kostur rylai')
+        await message.channel.send('itemy buty skrucone cd jasności umysłu jako druie jako trzecie najlepszy kostur '
+                                   'rylai')
         await message.channel.send('Następnie wszystko pod magie i efekty na procentowe zdrowie')
-        await message.channel.send('sytuacyjnie ale zawsze dobrze Demoniczny uścisk; Cierpienie Liandrego i w tym momencie masz dmg + 10 max hp')
-        await message.channel.send('Potem oczywiście klepsydra. Bardoz fajnie jest puścić E a potem R pięknie wtedy kleją')
+        await message.channel.send('sytuacyjnie ale zawsze dobrze Demoniczny uścisk; Cierpienie Liandrego i w tym '
+                                   'momencie masz dmg + 10 max hp')
+        await message.channel.send('Potem oczywiście klepsydra. Bardoz fajnie jest puścić E a potem R pięknie '
+                                   'wtedy kleją')
         await message.channel.send('Jak już masz Rylai nie musisz tego kombować slowy z dmg sie zrobią')
-        await message.channel.send('Uważaj jak się ruszysz to cancelujesz ulta. Czyli puszczasz i patrzysz jak im hp spada')
+        await message.channel.send('Uważaj jak się ruszysz to cancelujesz ulta. Czyli puszczasz i patrzysz jak '
+                                   'im hp spada')
 
     testowystr = user_message.lower()
 
@@ -120,7 +128,6 @@ async def on_message(ctx):
         await message.channel.send('NOOO KURWAA SPOOOK ')
         time.sleep(2)
         await message.channel.send('JAK GO POTRZEBA TO KURWA NIGDY GO NIE MA SPOK ZJEBALES')
-
 
     if ('linux' in testowystr) or ('ubuntu' in testowystr) or ('linuks' in testowystr):
         time.sleep(3)
@@ -145,12 +152,10 @@ async def on_message(ctx):
         time.sleep(3)
         await message.channel.send('Ironiczny. Mógł uratować innych od śmierci, ale nie siebie.')
 
-
     if '!asearch' in user_message.lower():
         fraze = user_message.split(',')
         fraze = [elem.strip() for elem in fraze]
         await message.channel.send(allegros.single_search(fraze[1:]))
-
 
     if '!forecast' in user_message.lower() and user_message != '!forecast':
         city = user_message.split(',')
@@ -162,8 +167,6 @@ async def on_message(ctx):
     elif '!forecast' in user_message.lower() and user_message == '!forecast':
         await message.channel.send(weather.weather_check())
 
-
-
     if papa == 1 and message.author == client.user:
         if ctx.guild.voice_client:
             ctx.guild.voice_client.stop()
@@ -171,9 +174,8 @@ async def on_message(ctx):
             sound = FFmpegPCMAudio(starting["barka"])
             await ctx.guild.voice_client.play(sound)
 
-
-
     await client.process_commands(message)
+
 
 @client.command(pass_context=True)
 async def mem(ctx):
@@ -200,15 +202,18 @@ async def pancerniaki(ctx):
     """checks dates of 5 next seances of 4 pancerni i pies in polish television"""
     await ctx.send(scrap.pancernioki())
 
+
 @client.command(pass_context=True)
 async def garbage(ctx):
     """checks if there is any garbage upcoming in next 7 days"""
     await ctx.send(f'%s\n {trash.trash_time()}' % me)
 
+
 @client.command(pass_context=True)
 async def test(ctx):
     """testing discord famework"""
     await ctx.send("testujemy")
+
 
 @client.command(pass_context=True)
 async def join(ctx):
@@ -219,6 +224,7 @@ async def join(ctx):
     else:
         await ctx.send("Panie najpierw rusz dupe i dołącz do kanału głosowego")
 
+
 @client.command(pass_context=True)
 async def stop(ctx):
     """Stops music that bot is playing"""
@@ -227,6 +233,7 @@ async def stop(ctx):
         voice.stop()
     else:
         await ctx.send("Panie kochany ja obecnie nic nie gram")
+
 
 @client.command(pass_context=True)
 async def pause(ctx):
@@ -237,6 +244,7 @@ async def pause(ctx):
     else:
         await ctx.send("Panie ja obecnie nic nie gram")
 
+
 @client.command(pass_contxt=True)
 async def resume(ctx):
     """Resume music if bot is playing"""
@@ -246,45 +254,54 @@ async def resume(ctx):
     else:
         await ctx.send("Panie ja nic nie mam zapałzowanego")
 
+
 @client.command(pass_context=True)
 async def gaz(ctx):
     """Plays legendary polish discopolo music about fast cars"""
-    await play_thing(ctx=ctx, id="gaz")
+    await play_thing(ctx=ctx, song_id="gaz")
+
 
 @client.command(pass_context=True)
 async def soap(ctx):
     """Plays legendary polish song about some soap"""
-    await play_thing(ctx=ctx, id="soap")
+    await play_thing(ctx=ctx, song_id="soap")
+
 
 @client.command(pass_context=True)
 async def faast(ctx):
     """Plays gonna go fast theme"""
-    await play_thing(ctx=ctx, id="faast")
+    await play_thing(ctx=ctx, song_id="faast")
+
 
 @client.command(pass_context=True)
 async def hess(ctx):
     """Plays song in honor of some guy"""
-    await play_thing(ctx=ctx, id="hess")
+    await play_thing(ctx=ctx, song_id="hess")
+
 
 @client.command(pass_context=True)
 async def narod(ctx):
     """Plays on of the more controvelsial music pieces in polish culture"""
-    await play_thing(ctx=ctx, id="narod")
+    await play_thing(ctx=ctx, song_id="narod")
+
 
 @client.command(pass_context=True)
 async def anthem1(ctx):
     """Plays one of the deamed anthems"""
-    await play_thing(ctx=ctx, id="anthem1")
+    await play_thing(ctx=ctx, song_id="anthem1")
+
 
 @client.command(pass_context=True)
 async def anthem2(ctx):
     """Plays second of the deamed anthems"""
-    await play_thing(ctx=ctx, id="anthem2")
+    await play_thing(ctx=ctx, song_id="anthem2")
+
 
 @client.command(pass_context=True)
 async def jtheme(ctx):
     """Plays Theme from great cartoon"""
-    await play_thing(ctx=ctx, id="jtheme")
+    await play_thing(ctx=ctx, song_id="jtheme")
+
 
 @client.command(pass_context=True)
 async def szanty(ctx):
@@ -292,6 +309,7 @@ async def szanty(ctx):
     argi = ['bitwa', 'dziewczyny', 'morskieh', "morskie", "keja"]
     await queueing(ctx, *argi)
     check_queue(ctx, ctx.message.guild.id)
+
 
 @client.command(pass_context=True)
 async def play(ctx, arg=''):
@@ -310,11 +328,13 @@ async def queue(ctx, *args):
     argi = list(args)
     await queueing(ctx, *argi)
 
+
 @client.command(pass_context=True)
 async def leave(ctx):
     """leaving the voice channel"""
     if ctx.voice_client:
         await ctx.guild.voice_client.disconnect()
+
 
 @client.command(pass_context=True)
 async def showid(ctx, arg1, arg2):
@@ -324,6 +344,7 @@ async def showid(ctx, arg1, arg2):
     print(arg1)
     print(arg2)
 
+
 @client.command(pass_context=True)
 async def add_events(ctx, arg1, arg2):
     """Adding custom event from events class"""
@@ -331,6 +352,7 @@ async def add_events(ctx, arg1, arg2):
     date = arg2
     channel = ctx.channel.id
     await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
+
 
 @client.command(pass_context=True)
 async def check_events(ctx):
@@ -344,6 +366,7 @@ async def check_events(ctx):
     else:
         await ctx.channel.send("nie ma żadnych nadchodzących eventów ")
 
+
 @client.command(pass_context=True)
 async def check_cyclic(ctx):
     """Checks if there are any cyclic events upcoming"""
@@ -356,6 +379,7 @@ async def check_cyclic(ctx):
     else:
         await ctx.channel.send("Nie nadchodzą żadne wydarzenia")
 
+
 @client.command(pass_context=True)
 async def add_cyclic(ctx, arg1, arg2):
     """Adds cyclic event like birthday"""
@@ -363,6 +387,7 @@ async def add_cyclic(ctx, arg1, arg2):
     date = arg2
     channel = ctx.channel.id
     await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
+
 
 async def daty_godziny ():
     """Managing time related events"""
@@ -372,7 +397,6 @@ async def daty_godziny ():
     jarkendar = client.get_channel(starting['jarkendar'])
     samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
     bot_test = client.get_channel(starting['bot_test'])
-
 
     global papa
     while not client.is_closed():
@@ -401,7 +425,6 @@ async def daty_godziny ():
         elif int(houer) == 21 and int(minnute) == 38:
             papa = 0
 
-
         if (int(houer) == 12 and int(minnute) == 0) or (int(houer) == 20 and int(minnute) == 0):
             await jarkendar.send(f'%s\n {trash.trash_time()}' % me)
             flag, mathing_events = events.event_detection()
@@ -413,10 +436,8 @@ async def daty_godziny ():
             else:
                 pass
 
-
         if int(houer) == 6 and int(minnute) == 0:
             await bot_test.send(weather.weather_check())
-
 
         if (int(houer) == 3) and (int(minnute) == 50):
             await jarkendar.send(weather.requesting(starting['home']))
