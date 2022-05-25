@@ -19,10 +19,11 @@ with open("starting.json") as start:
 queues = {}
 
 def check_queue(ctx, id):
-    if queues[id] != []:
-        voice = ctx.guild.voice_client
-        source = queues[id].pop(0)
-        player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
+    if queues:
+        if queues[id] != []:
+            voice = ctx.guild.voice_client
+            source = queues[id].pop(0)
+            player = voice.play(source, after=lambda x=None: check_queue(ctx, id))
 
 def get_together(sentence):
     """Refactoring statements from snake case to normal text string"""
@@ -288,7 +289,7 @@ async def jtheme(ctx):
 @client.command(pass_context=True)
 async def szanty(ctx):
     """Makes sailors songs playlist"""
-    argi = ['bitwa', 'dziewczyny']
+    argi = ['bitwa', 'dziewczyny', 'morskieh', "morskie", "keja"]
     await queueing(ctx, *argi)
     check_queue(ctx, ctx.message.guild.id)
 
