@@ -102,32 +102,7 @@ async def on_message(ctx):
     if message.author == client.user and not papa == 1:
         return
 
-    elif user_message.lower() == '!apmf':
-        await message.channel.send('Maxujesz e generalnie połkujesz z e nie zbliżając się')
-        await message.channel.send('Pierwszy item łezka da ci mane na spam. Grasz przede wszystkim bezpiecznie')
-        await message.channel.send('wykańczasz ich za pomocą E')
-        await message.channel.send('itemy buty skrucone cd jasności umysłu jako druie jako trzecie najlepszy kostur '
-                                   'rylai')
-        await message.channel.send('Następnie wszystko pod magie i efekty na procentowe zdrowie')
-        await message.channel.send('sytuacyjnie ale zawsze dobrze Demoniczny uścisk; Cierpienie Liandrego i w tym '
-                                   'momencie masz dmg + 10 max hp')
-        await message.channel.send('Potem oczywiście klepsydra. Bardoz fajnie jest puścić E a potem R pięknie '
-                                   'wtedy kleją')
-        await message.channel.send('Jak już masz Rylai nie musisz tego kombować slowy z dmg sie zrobią')
-        await message.channel.send('Uważaj jak się ruszysz to cancelujesz ulta. Czyli puszczasz i patrzysz jak '
-                                   'im hp spada')
-
     testowystr = user_message.lower()
-
-    if ('gdzie spok' in testowystr) or ('hej spok' in testowystr) or ('gdzie jest spok' in testowystr):
-        time.sleep(8)
-        await message.channel.send('SPOOOOKKKK')
-        time.sleep(5)
-        await message.channel.send('SPOOOOK KURWA')
-        time.sleep(7)
-        await message.channel.send('NOOO KURWAA SPOOOK ')
-        time.sleep(2)
-        await message.channel.send('JAK GO POTRZEBA TO KURWA NIGDY GO NIE MA SPOK ZJEBALES')
 
     if ('linux' in testowystr) or ('ubuntu' in testowystr) or ('linuks' in testowystr):
         time.sleep(3)
@@ -413,15 +388,15 @@ async def daty_godziny ():
             pull = random.randint(1, 2)
             papa = 1
             if pull == 1:
-                await samo_jedzonko.send('Przecież to moja ulubioona godzinka')
-                await samo_jedzonko.send(file=discord.File('./specjal/papiez-anime.gif'))
+                await samo_jedzonko.send(starting["special_quote1.1"])
+                await samo_jedzonko.send(file=discord.File(starting["special_gif"]))
             elif pull == 2:
-                await samo_jedzonko.send('KTO ŚMIE SZKALOWAĆ PAPIERZAAA !!!!!!')
-                await samo_jedzonko.send(file=discord.File('./specjal/papanani.jpg'))
+                await samo_jedzonko.send(starting['special_quote2.1'])
+                await samo_jedzonko.send(file=discord.File(starting["special_jpg1"]))
                 time.sleep(1)
-                await samo_jedzonko.send('OOO Papierzu Boże Imperatorze przybądź !!!!')
+                await samo_jedzonko.send(starting["special_quote2.2"])
                 time.sleep(3)
-                await samo_jedzonko.send(file=discord.File('./specjal/papemperor1.jpg'))
+                await samo_jedzonko.send(file=discord.File(starting["special_jpg2"]))
         elif int(houer) == 21 and int(minnute) == 38:
             papa = 0
 
