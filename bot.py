@@ -9,7 +9,7 @@ import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson, Events, CyclicEvents
-from apis import Weather_forecasting
+from apis import Weather_forecasting, RandoCatApi
 from discord import FFmpegPCMAudio
 
 
@@ -63,6 +63,7 @@ client = Bot('!')
 
 scrap = Scrapping()
 
+cat_api = RandoCatApi()
 weather = Weather_forecasting()
 paczuchy = client.get_channel(starting["voice_channel"])
 logging.basicConfig(level=logging.INFO)
@@ -363,6 +364,10 @@ async def add_cyclic(ctx, arg1, arg2):
     channel = ctx.channel.id
     await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
 
+@client.command(pass_context=True)
+async def kitten(ctx):
+    """Gets random citten image"""
+    await ctx.channel.send(cat_api.get_random_cat())
 
 async def daty_godziny ():
     """Managing time related events"""
@@ -384,7 +389,7 @@ async def daty_godziny ():
         dane_czas = clock.split(':', 3)
         houer, minnute, sec = dane_czas
 
-        if (int(houer) == 21) and (int(minnute) == 37) and papa == 0:
+        if (int(houer) == starting['houer']) and (int(minnute) == starting['minutes']) and papa == 0:
             pull = random.randint(1, 2)
             papa = 1
             if pull == 1:

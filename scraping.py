@@ -95,7 +95,8 @@ class Allegro_scrapping():
 
         main_prices = driver.find_elements(
             By.CSS_SELECTOR,
-            """div div div div div div div div div div div div div div div section article div div div div div span._1svub._lf05o"""
+            """div div div div div div div div div div div div div div div section article div div div div div 
+            span._1svub._lf05o"""
         )
 
         if len(main_titles) == 0:

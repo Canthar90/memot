@@ -71,3 +71,15 @@ class Weather_forecasting():
                         f"ciśnienie: {weather_hourly[6]['pressure']}, widoczność: {weather_hourly[6]['visibility']}m, "
                         f"prędkość watru: {weather_hourly[6]['wind_speed']}km/h, Nie pada,"
                         f" {weather_hourly[6]['weather'][0]['description']}\n")
+
+
+class RandoCatApi():
+    """API generating random cat image"""
+    def __init__(self):
+        self.URL = "https://api.thecatapi.com/v1/images/search"
+
+    def get_random_cat(self):
+        """Gets random cat api response return message url with kitten"""
+        response = requests.get(self.URL)
+        self.data = response.json()
+        return self.data[0]["url"]
