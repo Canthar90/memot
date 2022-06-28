@@ -9,7 +9,7 @@ import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson, Events, CyclicEvents
-from apis import Weather_forecasting, RandoCatApi
+from apis import Weather_forecasting, RandoCatApi, LOTRapi
 from discord import FFmpegPCMAudio
 
 
@@ -63,6 +63,7 @@ client = Bot('!')
 
 scrap = Scrapping()
 
+lotr_api = LOTRapi()
 cat_api = RandoCatApi()
 weather = Weather_forecasting()
 paczuchy = client.get_channel(starting["voice_channel"])
@@ -368,6 +369,11 @@ async def add_cyclic(ctx, arg1, arg2):
 async def kitten(ctx):
     """Gets random citten image"""
     await ctx.channel.send(cat_api.get_random_cat())
+
+@client.command(pass_context=True)
+async def lotr_quote(ctx):
+    """Gets random lotr quote"""
+    await ctx.channel.send(lotr_api.get_random_quote())
 
 async def daty_godziny ():
     """Managing time related events"""

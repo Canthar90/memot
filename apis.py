@@ -1,8 +1,10 @@
 import requests
 import datetime
 import json
+import random
 
-
+with open("starting.json") as start:
+    starting = json.load(start)
 
 class Weather_forecasting():
     def __init__(self):
@@ -83,3 +85,21 @@ class RandoCatApi():
         response = requests.get(self.URL)
         self.data = response.json()
         return self.data[0]["url"]
+
+
+class LOTRapi():
+    """Simple lord of the rings api usage"""
+    def __init__(self):
+        self.Key = starting["lotr_api_key"]
+        self.URL = "https://the-one-api.dev/v2"
+        self.header = {"Authorization": f"Bearer {self.Key}"}
+
+    def get_random_quote(self):
+        """gets random quote from LOTR api"""
+        quote_url = self.URL + "/quote"
+        response = requests.get(quote_url, headers=self.header)
+        quotes = response.json()
+        quotes_docked = quotes["docs"]
+        random_quote = random.choice(quotes_docked)
+        return random_quote["dialog"]
+
