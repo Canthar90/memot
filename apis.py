@@ -103,3 +103,16 @@ class LOTRapi():
         random_quote = random.choice(quotes_docked)
         return random_quote["dialog"]
 
+class JokeApi():
+    """Joke api to message"""
+    def __init__(self):
+        self.URL = "https://v2.jokeapi.dev/joke/Any"
+
+    def get_joke(self):
+        """Returns simple random joke dictionary with type setup and delivery"""
+        response = requests.get(self.URL)
+        joke = response.json()
+        if joke["type"] == "twopart":
+            return joke["setup"], joke["delivery"]
+        else:
+            return joke["setup"], False

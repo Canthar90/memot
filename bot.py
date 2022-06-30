@@ -9,7 +9,7 @@ import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson, Events, CyclicEvents
-from apis import Weather_forecasting, RandoCatApi, LOTRapi
+from apis import Weather_forecasting, RandoCatApi, LOTRapi, JokeApi
 from discord import FFmpegPCMAudio
 
 
@@ -63,6 +63,7 @@ client = Bot('!')
 
 scrap = Scrapping()
 
+joke_api = JokeApi()
 lotr_api = LOTRapi()
 cat_api = RandoCatApi()
 weather = Weather_forecasting()
@@ -374,6 +375,15 @@ async def kitten(ctx):
 async def lotr_quote(ctx):
     """Gets random lotr quote"""
     await ctx.channel.send(lotr_api.get_random_quote())
+
+@client.command(pass_contect=True)
+async def joke(ctx):
+    """Sends random joke"""
+    setup, delivery = joke_api.get_joke()
+    await ctx.channel.send(setup)
+    if delivery:
+        time.sleep(2)
+        await ctx.channel.send(delivery)
 
 async def daty_godziny ():
     """Managing time related events"""
