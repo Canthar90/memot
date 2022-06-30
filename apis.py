@@ -112,7 +112,8 @@ class JokeApi():
         """Returns simple random joke dictionary with type setup and delivery"""
         response = requests.get(self.URL)
         joke = response.json()
+        print(joke)
         if joke["type"] == "twopart":
             return joke["setup"], joke["delivery"]
         else:
-            return joke["setup"], False
+            return joke["joke"], False
