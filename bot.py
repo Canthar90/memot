@@ -367,15 +367,18 @@ async def add_cyclic(ctx, arg1, arg2):
     channel = ctx.channel.id
     await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
 
+
 @client.command(pass_context=True)
 async def kitten(ctx):
     """Gets random citten image"""
     await ctx.channel.send(cat_api.get_random_cat())
 
+
 @client.command(pass_context=True)
 async def lotr_quote(ctx):
     """Gets random lotr quote"""
     await ctx.channel.send(lotr_api.get_random_quote())
+
 
 @client.command(pass_contect=True)
 async def joke(ctx):
@@ -385,6 +388,7 @@ async def joke(ctx):
     if delivery:
         time.sleep(2)
         await ctx.channel.send(delivery)
+
 
 @client.command(pass_context=True)
 async def exchange(ctx, currnency_name, amount=None):
@@ -405,6 +409,7 @@ async def exchange(ctx, currnency_name, amount=None):
                                 f"{currency_api.get_custom(currency_name=currnency_name)} PLN")
         except:
             await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
+
 
 async def daty_godziny ():
     """Managing time related events"""
