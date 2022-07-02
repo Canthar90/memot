@@ -9,7 +9,7 @@ import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson, Events, CyclicEvents
-from apis import Weather_forecasting, RandoCatApi, LOTRapi, JokeApi
+from apis import Weather_forecasting, RandoCatApi, LOTRapi, JokeApi, CurrencyApi
 from discord import FFmpegPCMAudio
 
 
@@ -63,6 +63,7 @@ client = Bot('!')
 
 scrap = Scrapping()
 
+currency_api = CurrencyApi()
 joke_api = JokeApi()
 lotr_api = LOTRapi()
 cat_api = RandoCatApi()
@@ -384,6 +385,16 @@ async def joke(ctx):
     if delivery:
         time.sleep(2)
         await ctx.channel.send(delivery)
+
+@client.command(pass_context=True)
+async def exhange(ctx, currnency_name, ammount=1):
+    """Converts given currency in given ammount(optional) to PLN"""
+    if ammount != 1:
+        await ctx.channel.send(f" Konwersja waluty {currnency_name} dla ilości {ammount} na pln to"
+                               f" {currency_api.get_custom(currency_name=currnency_name, ammount=ammount)} PLN")
+    else:
+        await ctx.channel.send(f"Kurs waluty {currnency_name} to "
+                               f"{currency_api.get_custom(currency_name=currnency_name)} PLN")
 
 async def daty_godziny ():
     """Managing time related events"""

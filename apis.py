@@ -112,8 +112,30 @@ class JokeApi():
         """Returns simple random joke dictionary with type setup and delivery"""
         response = requests.get(self.URL)
         joke = response.json()
-        print(joke)
         if joke["type"] == "twopart":
             return joke["setup"], joke["delivery"]
         else:
             return joke["joke"], False
+
+class CurrencyApi():
+    """Currency checking api"""
+    def __init__(self):
+        self.URL = "https://api.apilayer.com/fixer/convert"
+        self.API_KEY = starting["currency_api_key"]
+        self.header = {
+            "apikey": self.API_KEY
+        }
+
+    def get_custom(self, currency_name, ammount=1):
+        """Converts passed currency to PLN"""
+        custom_url = self.URL + f"?to=PLN&from={currency_name}&amount={ammount}"
+        payload = {
+            "to": "PLN",
+            "from": currency_name,
+            "ammount": ammount
+        }
+        response = requests.get(custom_url, headers=self.header, data={})
+        data = response.json()
+        print(currency_name)
+        print(data)
+        return data["result"]
