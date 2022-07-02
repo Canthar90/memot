@@ -126,16 +126,9 @@ class CurrencyApi():
             "apikey": self.API_KEY
         }
 
-    def get_custom(self, currency_name, ammount=1):
+    def get_custom(self, currency_name, ammount=1.0):
         """Converts passed currency to PLN"""
         custom_url = self.URL + f"?to=PLN&from={currency_name}&amount={ammount}"
-        payload = {
-            "to": "PLN",
-            "from": currency_name,
-            "ammount": ammount
-        }
         response = requests.get(custom_url, headers=self.header, data={})
         data = response.json()
-        print(currency_name)
-        print(data)
         return data["result"]

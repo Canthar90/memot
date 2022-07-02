@@ -387,14 +387,24 @@ async def joke(ctx):
         await ctx.channel.send(delivery)
 
 @client.command(pass_context=True)
-async def exhange(ctx, currnency_name, ammount=1):
+async def exchange(ctx, currnency_name, amount=None):
     """Converts given currency in given ammount(optional) to PLN"""
-    if ammount != 1:
-        await ctx.channel.send(f" Konwersja waluty {currnency_name} dla ilości {ammount} na pln to"
-                               f" {currency_api.get_custom(currency_name=currnency_name, ammount=ammount)} PLN")
+    if type(amount) == str:
+        amount = amount.replace(",", ".")
+        amount = float(amount)
+
+    if amount != None:
+        try:
+            await ctx.channel.send(f" Konwersja waluty {currnency_name} dla ilości {amount} na pln to"
+                                f" {currency_api.get_custom(currency_name=currnency_name, ammount=amount)} PLN")
+        except:
+            await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
     else:
-        await ctx.channel.send(f"Kurs waluty {currnency_name} to "
-                               f"{currency_api.get_custom(currency_name=currnency_name)} PLN")
+        try:
+            await ctx.channel.send(f"Kurs waluty {currnency_name} to "
+                                f"{currency_api.get_custom(currency_name=currnency_name)} PLN")
+        except:
+            await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
 
 async def daty_godziny ():
     """Managing time related events"""
