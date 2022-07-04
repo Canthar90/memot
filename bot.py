@@ -9,7 +9,7 @@ import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
 from datson import Garbagson, Events, CyclicEvents
-from apis import Weather_forecasting, RandoCatApi, LOTRapi, JokeApi, CurrencyApi
+from apis import Weather_forecasting, RandoCatApi, LOTRapi, JokeApi, CurrencyApi, DrinkApi
 from discord import FFmpegPCMAudio
 
 
@@ -63,6 +63,7 @@ client = Bot('!')
 
 scrap = Scrapping()
 
+drink_api = DrinkApi()
 currency_api = CurrencyApi()
 joke_api = JokeApi()
 lotr_api = LOTRapi()
@@ -380,7 +381,7 @@ async def lotr_quote(ctx):
     await ctx.channel.send(lotr_api.get_random_quote())
 
 
-@client.command(pass_contect=True)
+@client.command(pass_context=True)
 async def joke(ctx):
     """Sends random joke"""
     setup, delivery = joke_api.get_joke()
@@ -388,6 +389,14 @@ async def joke(ctx):
     if delivery:
         time.sleep(2)
         await ctx.channel.send(delivery)
+
+
+@client.command(pass_context=True)
+async def drink_by_name(ctx, *args):
+    """Searches drink by name"""
+    question = list(args)
+    q = '%20'.join(question)
+    await ctx.channel.send(drink_api.search_by_name(q))
 
 
 @client.command(pass_context=True)

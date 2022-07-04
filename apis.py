@@ -6,7 +6,8 @@ import random
 with open("starting.json") as start:
     starting = json.load(start)
 
-class Weather_forecasting():
+
+class Weather_forecasting:
     def __init__(self):
         """loading starting data files to dictionaries"""
         with open("places.json") as file:
@@ -21,8 +22,6 @@ class Weather_forecasting():
             message += self.requesting(city=city)
 
         return message
-
-
 
 
     def requesting(self, city):
@@ -75,7 +74,7 @@ class Weather_forecasting():
                         f" {weather_hourly[6]['weather'][0]['description']}\n")
 
 
-class RandoCatApi():
+class RandoCatApi:
     """API generating random cat image"""
     def __init__(self):
         self.URL = "https://api.thecatapi.com/v1/images/search"
@@ -87,7 +86,7 @@ class RandoCatApi():
         return self.data[0]["url"]
 
 
-class LOTRapi():
+class LOTRapi:
     """Simple lord of the rings api usage"""
     def __init__(self):
         self.Key = starting["lotr_api_key"]
@@ -103,7 +102,8 @@ class LOTRapi():
         random_quote = random.choice(quotes_docked)
         return random_quote["dialog"]
 
-class JokeApi():
+
+class JokeApi:
     """Joke api to message"""
     def __init__(self):
         self.URL = "https://v2.jokeapi.dev/joke/Any"
@@ -117,7 +117,8 @@ class JokeApi():
         else:
             return joke["joke"], False
 
-class CurrencyApi():
+
+class CurrencyApi:
     """Currency checking api"""
     def __init__(self):
         self.URL = "https://api.apilayer.com/fixer/convert"
@@ -132,3 +133,32 @@ class CurrencyApi():
         response = requests.get(custom_url, headers=self.header, data={})
         data = response.json()
         return data["result"]
+
+
+class DrinkApi:
+    """Drink recipe api"""
+    def __init__(self):
+        self.base_url = "http://www.thecocktaildb.com/api/json/v1/1/"
+
+    def search_by_name(self, drink_name):
+        """Searches drink or first of drink list by name"""
+        endpoint_url = self.base_url + "search.php?s=" + drink_name
+        response = requests.get(endpoint_url)
+        drink = response.json()
+        drink = drink["drinks"][0]
+        message = ""
+        image = drink["strDrinkThumb"].replace("\\", "")
+        name = drink["strDrink"]
+        ingredients = ""
+        measurments = ""
+        for key in drink:
+            if "strIngredient" in key:
+                if drink[key]:
+                    ingredients += " " + drink[key] + ";"
+            if "strMeasure" in key:
+                if drink[key]:
+                    measurments += " " + drink[key] + ";"
+        message += f"{name} \n" \
+                   f"{image} \n Nesesary ingredients: {ingredients} \n Ammount of the ingredients: {measurments}\n" \
+                   f"the recipe: {drink['strInstructions']}"
+        return message
