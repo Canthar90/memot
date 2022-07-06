@@ -171,3 +171,17 @@ class DrinkApi:
                    f"{image} \n Nesesary ingredients: {ingredients} \n Ammount of the ingredients: {measurments}\n" \
                    f"the recipe: {drink['strInstructions']}"
         return message
+
+    def search_by_ingredient(self, ingredient):
+        """Searchs how many drinks you can do with given ingredient"""
+        endpoint_url = self.base_url + "filter.php?i=" + ingredient
+        response = requests.get(endpoint_url)
+        try:
+            drink_list = response.json()
+            drink_list = drink_list["drinks"]
+            end_list = []
+            for i in range(11):
+                end_list.append([drink_list[i]["strDrink"], drink_list[i]["strDrinkThumb"]])
+            return end_list
+        except:
+            return ["You provided bad ingredient name"]

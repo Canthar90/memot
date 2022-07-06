@@ -406,6 +406,14 @@ async def random_drink(ctx):
 
 
 @client.command(pass_context=True)
+async def drink_by_ingredient(ctx, ingredient):
+    """Searches drinks you can do witch given ingredient"""
+    drinks_list = drink_api.search_by_ingredient(ingredient=ingredient)
+    for drink in drinks_list:
+        await ctx.channel.send(drink[0] + "\n" + drink[1])
+
+
+@client.command(pass_context=True)
 async def exchange(ctx, currnency_name, amount=None):
     """Converts given currency in given ammount(optional) to PLN"""
     if type(amount) == str:
