@@ -144,6 +144,15 @@ class DrinkApi:
         """Searches drink or first of drink list by name"""
         endpoint_url = self.base_url + "search.php?s=" + drink_name
         response = requests.get(endpoint_url)
+        return self.response_refactor(response=response)
+
+    def random_drink(self):
+        """Give a random drink recipe"""
+        endpoint_url = self.base_url + "random.php"
+        response = requests.get(endpoint_url)
+        return self.response_refactor(response=response)
+
+    def response_refactor(self, response):
         drink = response.json()
         drink = drink["drinks"][0]
         message = ""

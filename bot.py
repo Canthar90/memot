@@ -395,8 +395,14 @@ async def joke(ctx):
 async def drink_by_name(ctx, *args):
     """Searches drink by name"""
     question = list(args)
-    q = '%20'.join(question)
+    q = ' '.join(question)
     await ctx.channel.send(drink_api.search_by_name(q))
+
+
+@client.command(pass_context=True)
+async def random_drink(ctx):
+    """Searches random drink recipe"""
+    await ctx.channel.send(drink_api.random_drink())
 
 
 @client.command(pass_context=True)
