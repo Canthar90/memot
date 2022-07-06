@@ -408,9 +408,12 @@ async def random_drink(ctx):
 @client.command(pass_context=True)
 async def drink_by_ingredient(ctx, ingredient):
     """Searches drinks you can do witch given ingredient"""
-    drinks_list = drink_api.search_by_ingredient(ingredient=ingredient)
-    for drink in drinks_list:
-        await ctx.channel.send(drink[0] + "\n" + drink[1])
+    drinks_list, flag = drink_api.search_by_ingredient(ingredient=ingredient)
+    if flag:
+        for drink in drinks_list:
+            await ctx.channel.send(drink[0] + "\n" + drink[1])
+    else:
+        await ctx.channel.send(drinks_list[0])
 
 
 @client.command(pass_context=True)

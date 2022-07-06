@@ -182,6 +182,6 @@ class DrinkApi:
             end_list = []
             for i in range(11):
                 end_list.append([drink_list[i]["strDrink"], drink_list[i]["strDrinkThumb"]])
-            return end_list
+            return end_list, True
         except:
-            return ["You provided bad ingredient name"]
+            return ["You provided bad ingredient name"], False
