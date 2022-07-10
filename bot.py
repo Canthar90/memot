@@ -27,15 +27,6 @@ def check_queue(ctx, channel_id):
             player = voice.play(source, after=lambda x=None: check_queue(ctx, channel_id))
 
 
-def get_together(sentence):
-    """Refactoring statements from snake case to normal text string"""
-    item_list = str(sentence).split('_')
-    title = ''
-    for elem in item_list:
-        title += elem + ' '
-    return title
-
-
 async def play_thing(ctx, song_id):
     """Plays passed song if bot is placed in voice channel"""
     if ctx.voice_client:
@@ -302,6 +293,7 @@ async def play(ctx, arg=''):
         source = FFmpegPCMAudio(song)
         player = voice.play(source, after=lambda x=None: check_queue(ctx, ctx.message.guild.id))
 
+
 @client.command(pass_context=True)
 async def queue(ctx, *args):
     """adding song to queue"""
@@ -317,7 +309,7 @@ async def leave(ctx):
 
 
 @client.command(pass_context=True)
-async def add_events(ctx, date, *args):
+async def add_event(ctx, date, *args):
     """Adding custom event from events class date format YYYY-MM-DD description"""
     title = list(args)
     title = ' '.join(args)
@@ -476,7 +468,7 @@ async def daty_godziny ():
                 pass
 
         if int(houer) == 6 and int(minnute) == 0:
-            await bot_test.send(weather.weather_check())
+            pass
 
         if (int(houer) == 3) and (int(minnute) == 50):
             await jarkendar.send(weather.requesting(starting['home']))
