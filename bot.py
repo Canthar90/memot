@@ -317,19 +317,10 @@ async def leave(ctx):
 
 
 @client.command(pass_context=True)
-async def showid(ctx, arg1, arg2):
-    """Shows author id"""
-    global paczuchy, starting
-    await ctx.channel.send(f"testujemy wiadomości {ctx.author.id}")
-    print(arg1)
-    print(arg2)
-
-
-@client.command(pass_context=True)
-async def add_events(ctx, arg1, arg2):
-    """Adding custom event from events class"""
-    title = get_together(sentence=arg1)
-    date = arg2
+async def add_events(ctx, date, *args):
+    """Adding custom event from events class date format YYYY-MM-DD description"""
+    title = list(args)
+    title = ' '.join(args)
     channel = ctx.channel.id
     await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
 
@@ -361,10 +352,10 @@ async def check_cyclic(ctx):
 
 
 @client.command(pass_context=True)
-async def add_cyclic(ctx, arg1, arg2):
-    """Adds cyclic event like birthday"""
-    title = get_together(sentence=arg1)
-    date = arg2
+async def add_cyclic(ctx, date, *args):
+    """Adds cyclic event like birthday date should be added in format like MM-DD description"""
+    title = list(args)
+    title = ' '.join(title)
     channel = ctx.channel.id
     await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
 
