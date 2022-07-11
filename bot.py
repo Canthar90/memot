@@ -311,10 +311,14 @@ async def leave(ctx):
 @client.command(pass_context=True)
 async def add_event(ctx, date, *args):
     """Adding custom event from events class date format YYYY-MM-DD description"""
-    title = list(args)
-    title = ' '.join(args)
-    channel = ctx.channel.id
-    await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
+    try:
+        date_test = datetime.strptime(date, "%Y-%m-%d").date()
+        title = list(args)
+        title = ' '.join(args)
+        channel = ctx.channel.id
+        await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
+    except:
+        await ctx.channel.send("You typed wrong data expected format is YYYY-MM-DD multi word description")
 
 
 @client.command(pass_context=True)
@@ -346,10 +350,15 @@ async def check_cyclic(ctx):
 @client.command(pass_context=True)
 async def add_cyclic(ctx, date, *args):
     """Adds cyclic event like birthday date should be added in format like MM-DD description"""
-    title = list(args)
-    title = ' '.join(title)
-    channel = ctx.channel.id
-    await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
+    try:
+        date_test = datetime.strptime(f"{datetime.strftime(datetime.today(), format('%Y'))}-{date}",
+                                      format("%Y-%m-%d")).date()
+        title = list(args)
+        title = ' '.join(title)
+        channel = ctx.channel.id
+        await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
+    except:
+        await ctx.channel.send("You passed data in wrong format expected format MM-DD multi word description")
 
 
 @client.command(pass_context=True)

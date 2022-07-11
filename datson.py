@@ -3,7 +3,7 @@ import datetime as dt
 from datetime import datetime, timedelta
 
 
-class Garbagson():
+class Garbagson:
     """Checking if there are any upcoming garbage"""
 
     def __init__(self):
@@ -85,7 +85,7 @@ class Garbagson():
             return message
 
 
-class Events():
+class Events:
     """Class for dealing with custom one time events"""
 
     def __init__(self):
@@ -130,7 +130,7 @@ class Events():
                 return False, {}
 
 
-class CyclicEvents():
+class CyclicEvents:
     """Class holding cyclic events like birthdays for example date"""
 
     def __init__(self):
