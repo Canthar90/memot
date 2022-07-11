@@ -62,6 +62,8 @@ cat_api = RandoCatApi()
 weather = Weather_forecasting()
 paczuchy = client.get_channel(starting["voice_channel"])
 logging.basicConfig(level=logging.INFO)
+greviouses_path = "./specjal/grevious special"
+greviouses = [x for x in os.listdir(greviouses_path) if os.path.isfile(os.path.join(greviouses_path, x))]
 
 
 @client.event
@@ -144,6 +146,12 @@ async def on_message(ctx):
             papa = 0
             sound = FFmpegPCMAudio(starting["barka"])
             await ctx.guild.voice_client.play(sound)
+
+    if "hello there" in user_message.lower() or "lightsaber" in user_message.lower():
+        grevious = random.choice(greviouses)
+        path_base = "./specjal/grevious special/"
+        grevious_path = path_base + grevious
+        await ctx.channel.send(file=discord.File(grevious_path))
 
     await client.process_commands(message)
 
