@@ -321,7 +321,6 @@ async def add_event(ctx, date, *args):
     """Adding custom event from events class date format YYYY-MM-DD description"""
     try:
         date_test = datetime.strptime(date, "%Y-%m-%d").date()
-        title = list(args)
         title = ' '.join(args)
         channel = ctx.channel.id
         await ctx.channel.send(events.add_event(date=date, title=title, channel=channel))
@@ -361,8 +360,7 @@ async def add_cyclic(ctx, date, *args):
     try:
         date_test = datetime.strptime(f"{datetime.strftime(datetime.today(), format('%Y'))}-{date}",
                                       format("%Y-%m-%d")).date()
-        title = list(args)
-        title = ' '.join(title)
+        title = ' '.join(args)
         channel = ctx.channel.id
         await ctx.channel.send(cyclic.add_item(date=date, title=title, channel=channel))
     except:
