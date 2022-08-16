@@ -74,6 +74,7 @@ class Weather_forecasting:
                         f" {weather_hourly[6]['weather'][0]['description']}\n")
 
 
+
 class RandoCatApi:
     """API generating random cat image"""
     def __init__(self):
