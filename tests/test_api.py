@@ -1,6 +1,7 @@
 from http.client import HTTPException
 from operator import contains
 import sys
+
 from urllib.error import HTTPError
 import pytest
 import requests
@@ -13,9 +14,10 @@ parent = os.path.dirname(current)
 
 sys.path.append(parent)
 
-from apis import RandoCatApi, Weather_forecasting
+from apis import RandoCatApi, Weather_forecasting, LOTRapi
 
 
+# -----------Testing Cat API-----------------
 def test_random_cat():
     """Test if random cat api works correctly"""
     cats = RandoCatApi()
@@ -28,7 +30,8 @@ def test_random_cat_not_pased():
     with pytest.raises(TypeError):
         cats.get_random_cat("this should not be here")
         
-        
+
+# ------------Testing Weather API------------ 
 def test_weather_forecast_pass():
     """Test if checking weather forecasting api works with passed correct parameters"""
     forecasting = Weather_forecasting()
@@ -70,4 +73,32 @@ def test_weather_forecast_requesting_fail_no_city_in_database():
     with pytest.raises(KeyError):
         forecasting.requesting("Korinis")
         
+
+def test_weather_forecast_requesting_fail_multiple_args():
+    """Testing if weather forecasting requesting raises exception when more than 1 argument passed"""
+    forecasting = Weather_forecasting()
+    forecasting.places = {"Torun": ["53.0137", "18.5981"],
+                          "Watykan":  ["41.9024", "12.4533"],  
+                          }
+    with pytest.raises(TypeError) as err: 
+        forecasting.requesting("Torun", "Watykan")
+    assert "takes 2 positional arguments" in str(err.value)
+
+
+# ------------------Test LOTR API--------------------------
+def test_lotr_api_passes():
+    """Test if LOTR api works correctly and gives random LOTR quote by checking it 
+    response format"""
+    lotr = LOTRapi()
+    response = lotr.get_random_quote()
+    assert type(response) == str, response
+
+
+def test_lotr_api_fails_unexpected_arguments():
+    """Test if LOTR api raises exception while additional argument passed"""
+    lotr = LOTRapi()
+    with pytest.raises(TypeError) as err:
+        lotr.get_random_quote("random argument")
+    assert "takes 1 positional argument" in str(err.value)
+
     
