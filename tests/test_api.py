@@ -14,7 +14,7 @@ parent = os.path.dirname(current)
 
 sys.path.append(parent)
 
-from apis import RandoCatApi, Weather_forecasting, LOTRapi
+from apis import RandoCatApi, Weather_forecasting, LOTRapi, JokeApi
 
 
 # -----------Testing Cat API-----------------
@@ -102,3 +102,17 @@ def test_lotr_api_fails_unexpected_arguments():
     assert "takes 1 positional argument" in str(err.value)
 
     
+# --------------- Test Joke API------------------------------
+def test_joke_api_passes():
+    """Test if joke api works and gives random Joke by checking format of response"""
+    jocker = JokeApi()
+    response = jocker.get_joke()
+    assert type(response) == tuple
+
+
+def test_joke_api_fails_unexpected_argument():
+    """Test if joke api raises exception when called with unexpected argument"""
+    jocker = JokeApi()
+    with pytest.raises(TypeError) as err:
+        jocker.get_joke(5, "oither nonsence")
+    assert "takes 1 positional argument" in str(err.value)
