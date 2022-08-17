@@ -1,4 +1,3 @@
-
 from http.client import HTTPException
 from operator import contains
 import sys
@@ -46,11 +45,29 @@ def test_weather_forecast_fail_argument_passed():
         
         
 def test_weather_forecast_fail_nonsence_data():
-    """Test if weather forecast """
+    """Test if weather forecast returns Http Error 400 with nonsence argument passed """
     forecasting = Weather_forecasting()
     forecasting.places = {"kululumpu": ["231242", "53421"],}
-    with pytest.raises(requests.exceptions.HTTPError):
+    with pytest.raises(requests.exceptions.HTTPError) as err:
         forecasting.weather_check()
+    assert "400" in str(err.value)
 
+
+def test_weather_foracast_requesting_passed():
+    """Test if forecast requesting passes weather for correct place"""
+    forecasting = Weather_forecasting()
+    forecasting.places = {"Torun": ["53.0137", "18.5981"],
+                          "Watykan":  ["41.9024", "12.4533"],  
+                          }
+    assert "Prognoza pogody dla miasta Watykan" in forecasting.requesting("Watykan")
+
+
+def test_weather_forecast_requesting_fail_no_city_in_database():
+    """Testing if weather forecasting raises TypeError with passed city name that is not 
+    in the database"""
+    forecasting = Weather_forecasting()
+    forecasting.places = {"Torun": ["53.0137", "18.5981"],}
+    with pytest.raises(KeyError):
+        forecasting.requesting("Korinis")
         
     
