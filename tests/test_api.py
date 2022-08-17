@@ -1,4 +1,5 @@
 from http.client import HTTPException
+from locale import currency
 from operator import contains
 import sys
 
@@ -14,7 +15,7 @@ parent = os.path.dirname(current)
 
 sys.path.append(parent)
 
-from apis import RandoCatApi, Weather_forecasting, LOTRapi, JokeApi
+from apis import RandoCatApi, Weather_forecasting, LOTRapi, JokeApi, CurrencyApi
 
 
 # -----------Testing Cat API-----------------
@@ -116,3 +117,55 @@ def test_joke_api_fails_unexpected_argument():
     with pytest.raises(TypeError) as err:
         jocker.get_joke(5, "oither nonsence")
     assert "takes 1 positional argument" in str(err.value)
+
+
+# ---------------Test Currency API------------------------
+def test_currency_api_passes_one_argument():
+    """Test if currency api works properly with one argument passed"""
+    currency = CurrencyApi()
+    response = currency.get_custom("BTC")
+    assert type(response) == float
+
+
+def test_currency_api_passes_two_arguments():
+    """Test if currnecy api works with two argument passed"""
+    currency = CurrencyApi()
+    response = currency.get_custom("BTC", 20)
+    assert type(response) == float
+
+
+def test_currency_api_fails_no_argument_passed():
+    """Test if currency api rises exception when no argument is passed"""
+    currency = CurrencyApi()
+    with pytest.raises(TypeError) as err:
+        currency.get_custom()
+   
+
+def test_currnecy_api_fails_to_many_arguments_passed():
+    """Test if currency api rises exception when to many arguments are passed"""
+    currency = CurrencyApi()
+    with pytest.raises(TypeError):
+        currency.get_custom("BTC", 10, 20, 30)
+
+
+def test_currency_api_fails_bad_first_argument_str():
+    """Test of currency api rises KeyError exception with bad first argument passed
+    some random string"""
+    currency = CurrencyApi()
+    with pytest.raises(KeyError):
+        currency.get_custom("Nonsence")
+
+
+def test_currency_api_fails_bad_first_argument_int():
+    """Test if currency api rises KeyError when passed int as a first argument"""
+    currency = CurrencyApi()
+    with pytest.raises(KeyError):
+        currency.get_custom(123123)
+
+
+def test_currency_api_fails_bad_second_argument_str():
+    """Trst if currency api rises KeyError when passed string as a second argument"""
+    currency = CurrencyApi()
+    with pytest.raises(KeyError):
+        currency.get_custom("BTC", "Nonsence")
+    
