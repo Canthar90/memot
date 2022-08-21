@@ -174,14 +174,36 @@ def test_currency_api_fails_bad_second_argument_str():
 def test_random_drink_api_endponit_passes():
     """Test if random drink api endpoint is working"""
     drinks = DrinkApi()
-    assert ("Nesesary ingredients:" and "Ammount of the ingredients:") in drinks.random_drink() 
+    assert ("Necessary ingredients:" and "Ammount of the ingredients:") in drinks.random_drink() 
     
     
-def test_random_drink_api_endpion_fails_argument_passed():
+def test_random_drink_api_endpion_fails_argument_fails():
     """Test if random drink api endpiont raises TypeError when any argument passed"""
     drinks = DrinkApi()
     with pytest.raises(TypeError) as err:
        drinks.random_drink("Libre Cuba")
-    assert "takes 1 positional argument" 
+    assert "takes 1 positional argument" in str(err.value)
+    
+
+def test_search_by_name_drink_api_endpoint_passes():
+    """Test if search drink by name api endpoint is working"""
+    drinks = DrinkApi()
+    resp = drinks.search_by_name("Cuba Libre")
+    assert ("Necessary ingredients:" and "Ammount of the ingredients:") in resp
     
     
+def test_search_by_name_drink_api_endpoint_nonsense_argument_fails():
+    """Test if search drink by name api endpiont raises TypeError with nonsense
+    argument passed"""
+    drinks = DrinkApi()
+    with pytest.raises(TypeError):    
+        drinks.search_by_name("nanskjdhiuwrffq")
+
+
+def test_search_by_name_drink_api_endpoint_many_arguments_fails():
+    """Test if search drink by name api endpoint raises TypeError when
+    many argument passed"""
+    drinks = DrinkApi()
+    with pytest.raises(TypeError) as err:
+        drinks.search_by_name("Libre Cuba", "Mojito")
+    assert "takes 2 positional arguments" in str(err.value)

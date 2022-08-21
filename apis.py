@@ -169,7 +169,7 @@ class DrinkApi:
                 if drink[key]:
                     measurments += " " + drink[key] + ";"
         message += f"{name} \n" \
-                   f"{image} \n Nesesary ingredients: {ingredients} \n Ammount of the ingredients: {measurments}\n" \
+                   f"{image} \n Necessary ingredients: {ingredients} \n Ammount of the ingredients: {measurments}\n" \
                    f"the recipe: {drink['strInstructions']}"
         return message
 
