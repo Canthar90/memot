@@ -15,7 +15,7 @@ parent = os.path.dirname(current)
 
 sys.path.append(parent)
 
-from apis import RandoCatApi, Weather_forecasting, LOTRapi, JokeApi, CurrencyApi
+from apis import RandoCatApi, Weather_forecasting, LOTRapi, JokeApi, CurrencyApi, DrinkApi
 
 
 # -----------Testing Cat API-----------------
@@ -168,4 +168,20 @@ def test_currency_api_fails_bad_second_argument_str():
     currency = CurrencyApi()
     with pytest.raises(KeyError):
         currency.get_custom("BTC", "Nonsence")
+        
+
+# -----------------Test Drink API ------------------
+def test_random_drink_api_endponit_passes():
+    """Test if random drink api endpoint is working"""
+    drinks = DrinkApi()
+    assert ("Nesesary ingredients:" and "Ammount of the ingredients:") in drinks.random_drink() 
+    
+    
+def test_random_drink_api_endpion_fails_argument_passed():
+    """Test if random drink api endpiont raises TypeError when any argument passed"""
+    drinks = DrinkApi()
+    with pytest.raises(TypeError) as err:
+       drinks.random_drink("Libre Cuba")
+    assert "takes 1 positional argument" 
+    
     
