@@ -157,22 +157,32 @@ def test_currency_api_fails_bad_first_argument_str():
     """Test of currency api rises KeyError exception with bad first argument passed
     some random string"""
     currency = CurrencyApi()
-    with pytest.raises(KeyError):
-        currency.get_custom("Nonsence")
+    try:
+        with pytest.raises(KeyError):
+            res, flag = currency.get_custom("Nonsence")
+    except:
+        pytest.fail(res)
+        
 
 
 def test_currency_api_fails_bad_first_argument_int():
     """Test if currency api rises KeyError when passed int as a first argument"""
     currency = CurrencyApi()
-    with pytest.raises(KeyError):
-        currency.get_custom(123123)
+    try:
+        with pytest.raises(KeyError):
+            res, flag =currency.get_custom(123123)
+    except:
+        pytest.fail(res)
 
 
 def test_currency_api_fails_bad_second_argument_str():
     """Trst if currency api rises KeyError when passed string as a second argument"""
     currency = CurrencyApi()
-    with pytest.raises(KeyError):
-        currency.get_custom("BTC", "Nonsence")
+    try:
+        with pytest.raises(KeyError):
+            res, flag = currency.get_custom("BTC", "Nonsence")
+    except:
+        pytest.fail(res)
         
 
 # -----------------Test Drink API ------------------
