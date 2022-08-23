@@ -130,16 +130,6 @@ async def on_message(ctx):
         fraze = [elem.strip() for elem in fraze]
         await message.channel.send(allegros.single_search(fraze[1:]))
 
-    if '!forecast' in user_message.lower() and user_message != '!forecast':
-        city = user_message.split(',')
-        city = [elem.strip() for elem in city]
-        try:
-            await message.channel.send(weather.requesting(city[1]))
-        except:
-            await message.channel.send("Nie posiadam takiej miejscowości w swojej bazie")
-    elif '!forecast' in user_message.lower() and user_message == '!forecast':
-        await message.channel.send(weather.weather_check())
-
     if papa == 1 and message.author == client.user:
         if ctx.guild.voice_client:
             ctx.guild.voice_client.stop()
@@ -180,6 +170,18 @@ async def spam(ctx, number):
 async def pancerniaki(ctx):
     """checks dates of 5 next seances of 4 pancerni i pies in polish television"""
     await ctx.send(scrap.pancernioki())
+
+
+@client.command(pass_context=True)
+async def forecast(ctx, city: str = "base"):
+    if city != "base":
+        try:
+            await ctx.send(weather.requesting(city))
+        except:
+            await ctx.send("There is no such city in my database")
+    else:
+        await ctx.send(weather.weather_check())
+    
 
 
 @client.command(pass_context=True)
