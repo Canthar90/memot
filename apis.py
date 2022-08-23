@@ -133,7 +133,10 @@ class CurrencyApi:
         custom_url = self.URL + f"?to=PLN&from={currency_name}&amount={ammount}"
         response = requests.get(custom_url, headers=self.header, data={})
         data = response.json()
-        return data["result"]
+        if "You have exceeded your daily" in data["message"]:
+            return "requests limit reached", False
+        else:
+            return data["result"], True
 
 
 class DrinkApi:

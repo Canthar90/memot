@@ -1,6 +1,4 @@
-# from http.client import HTTPException
-# from locale import currency
-# from operator import contains
+
 import sys
 
 from urllib.error import HTTPError
@@ -123,15 +121,22 @@ def test_joke_api_fails_unexpected_argument():
 def test_currency_api_passes_one_argument():
     """Test if currency api works properly with one argument passed"""
     currency = CurrencyApi()
-    response = currency.get_custom("BTC")
-    assert type(response) == float, response
+    response, flag = currency.get_custom("BTC")
+    try:
+        assert type(response) == float and flag == True
+    except AssertionError:
+        pytest.fail(response)
+   
 
 
 def test_currency_api_passes_two_arguments():
     """Test if currnecy api works with two argument passed"""
     currency = CurrencyApi()
-    response = currency.get_custom("BTC", 20)
-    assert type(response) == float, response
+    response, flag = currency.get_custom("BTC", 20)
+    try:
+        assert type(response) == float and flag == True
+    except AssertionError :
+        pytest.fail(response)
 
 
 def test_currency_api_fails_no_argument_passed():
