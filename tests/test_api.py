@@ -1,6 +1,6 @@
-from http.client import HTTPException
-from locale import currency
-from operator import contains
+# from http.client import HTTPException
+# from locale import currency
+# from operator import contains
 import sys
 
 from urllib.error import HTTPError
@@ -124,14 +124,14 @@ def test_currency_api_passes_one_argument():
     """Test if currency api works properly with one argument passed"""
     currency = CurrencyApi()
     response = currency.get_custom("BTC")
-    assert type(response) == float
+    assert type(response) == float, response
 
 
 def test_currency_api_passes_two_arguments():
     """Test if currnecy api works with two argument passed"""
     currency = CurrencyApi()
     response = currency.get_custom("BTC", 20)
-    assert type(response) == float
+    assert type(response) == float, response
 
 
 def test_currency_api_fails_no_argument_passed():
@@ -206,4 +206,28 @@ def test_search_by_name_drink_api_endpoint_many_arguments_fails():
     drinks = DrinkApi()
     with pytest.raises(TypeError) as err:
         drinks.search_by_name("Libre Cuba", "Mojito")
+    assert "takes 2 positional arguments" in str(err.value)
+
+
+def test_search_by_ingredient_drink_api_endpoint_passes():
+    """Test if search drink by name api endpoint works fine"""
+    drinks = DrinkApi()
+    resp_list, resp_flag = drinks.search_by_ingredient("milk")
+    assert resp_flag == True and type(resp_list) == list
+
+
+def test_search_by_ingredient_drink_api_endpoint_false_wrong_arg():
+    """Test if search drink by name api endpoint fails when
+    invalid argument passed"""
+    drinks = DrinkApi()
+    resp_mess, resp_flag = drinks.search_by_ingredient("ksajhdkauhs")
+    assert resp_flag == False, resp_mess == "You provided bad ingredient name"
+
+
+def test_search_by_ingredient_drink_api_fails_many_arguments():
+    """Test if search drink by name api endpoint rise TypeError
+    when many argument passed """
+    drinks = DrinkApi()
+    with pytest.raises(TypeError) as err:
+        drinks.search_by_ingredient("milk", "coffee")
     assert "takes 2 positional arguments" in str(err.value)
