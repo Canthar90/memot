@@ -424,18 +424,25 @@ async def exchange(ctx, currnency_name, amount=None):
         amount = float(amount)
 
     if amount != None:
-        try:
-            await ctx.channel.send(f" Konwersja waluty {currnency_name} dla ilości {amount} na pln to"
-                                f" {currency_api.get_custom(currency_name=currnency_name, ammount=amount)} PLN")
-        except:
-            await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
+        resp, flag = currency_api.get_custom(currency_name=currnency_name, ammount=amount)
+        if flag == True:
+            try:
+                await ctx.channel.send(f" Konwersja waluty {currnency_name} dla ilości {amount} na pln to"
+                                f" {resp} PLN")
+            except:
+                await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
+        else:
+            await ctx.channel.send(resp)
     else:
-        try:
-            await ctx.channel.send(f"Kurs waluty {currnency_name} to "
-                                f"{currency_api.get_custom(currency_name=currnency_name)} PLN")
-        except:
-            await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
-
+        resp, flag = currency_api.get_custom(currency_name=currnency_name, ammount=amount)
+        if flag == True:
+            try:
+                await ctx.channel.send(f"Kurs waluty {currnency_name} to "
+                                f"{resp} PLN")
+            except:
+                await ctx.channel.send("Proszę podać dane w formacie waluta ilość(opcjonalny) np EUR 5")
+        else:
+            await ctx.channel.send(resp)
 
 async def daty_godziny ():
     """Managing time related events"""
