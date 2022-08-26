@@ -10,6 +10,7 @@ import time
 import json
 
 
+
 class Scrapping():
     def __init__(self):
         pass
@@ -64,8 +65,13 @@ class Allegro_scrapping():
         action.perform()
 
         time.sleep(1)
+        
+        
         search_pole = driver.find_element(
-            By.XPATH, "/html/body/div[3]/div[4]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input")
+            By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input"
+        )
+
+        
 
         action.click(on_element=search_pole)
         action.send_keys(search_word)
@@ -73,12 +79,13 @@ class Allegro_scrapping():
         action.key_up(Keys.ENTER)
         action.perform()
 
-        if by_pricve == 'True':
-            time.sleep(1)
+        if by_pricve:
+            print("dupa")
+            time.sleep(2)
             sorting_selector = driver.find_element(
                 By.XPATH,
-                """/html/body/div[2]/div[2]/div/div/div/div/div/div[3]/div[1]/div[3]/div[3]/div/div/div/select""")
-
+                """//*[@id="allegro.listing.sort"]""")
+            
             action.click(on_element=sorting_selector)
             action.key_down(Keys.ARROW_DOWN)
             action.key_up(Keys.ARROW_DOWN)
@@ -89,15 +96,15 @@ class Allegro_scrapping():
         time.sleep(2)
 
         main_titles = driver.find_elements(
-            By.CSS_SELECTOR,
-            """div div div div div div div div div div div div div div div section article div div div h2 a"""
-        )
+            By.XPATH,
+            """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[1]/h2/a""")
+        
 
         main_prices = driver.find_elements(
-            By.CSS_SELECTOR,
-            """div div div div div div div div div div div div div div div section article div div div div div 
-            span._1svub._lf05o"""
-        )
+            By.XPATH, 
+            """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[2]/div/div/span""")
+        
+        
 
         if len(main_titles) == 0:
             return 'Sory nie mogę znaleźć wyników dla tego zapytania'
@@ -128,3 +135,8 @@ class Allegro_scrapping():
             message = self.search(search_word=fraze[0], search_number=fraze[1], by_pricve=fraze[2])
             return message
 
+
+
+
+scrap = Allegro_scrapping()
+print(scrap.search("gtx 1080", 5, True))

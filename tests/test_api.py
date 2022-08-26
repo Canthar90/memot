@@ -1,7 +1,4 @@
-
 import sys
-
-from urllib.error import HTTPError
 import pytest
 import requests
 import sys
