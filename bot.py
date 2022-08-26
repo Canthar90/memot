@@ -3,6 +3,7 @@ import random
 import time
 import logging
 from datetime import datetime
+from tkinter.tix import Tree
 import discord
 from discord.ext.commands import Bot
 import json
@@ -125,10 +126,7 @@ async def on_message(ctx):
         time.sleep(3)
         await message.channel.send('Ironiczny. Mógł uratować innych od śmierci, ale nie siebie.')
 
-    if '!asearch' in user_message.lower():
-        fraze = user_message.split(',')
-        fraze = [elem.strip() for elem in fraze]
-        await message.channel.send(allegros.single_search(fraze[1:]))
+    
 
     if papa == 1 and message.author == client.user:
         if ctx.guild.voice_client:
@@ -153,6 +151,14 @@ async def mem(ctx):
     base = "./memowo/"
     file_final = base + file_part
     await ctx.send(file=discord.File(file_final))
+
+
+@client.command(pass_context=True)
+async def allscrap(ctx, phraze: str, reasults: int=1, option1: bool=False):
+    """Searches phrazes on allegro in format: Sarched phraze number of reasults 
+    True(to search by tche cheapest)"""
+    await ctx.send(allegros.search(search_word=phraze, search_number=reasults, 
+    by_pricve=option1))
 
 
 @client.command(pass_context=True)
