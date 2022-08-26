@@ -122,21 +122,3 @@ class Allegro_scrapping():
             message += "Nie było wystarczająco dużo wyników wyszukiwania"
             driver.quit()
             return message
-
-    def single_search(self, fraze):
-        """Define how to act depending on passed input"""
-        if len(fraze) == 1:
-            message = self.search(search_word=fraze[0])
-            return message
-        elif len(fraze) == 2:
-            message = self.search(search_word=fraze[0], search_number=fraze[1])
-            return message
-        elif len(fraze) == 3:
-            message = self.search(search_word=fraze[0], search_number=fraze[1], by_pricve=fraze[2])
-            return message
-
-
-
-
-scrap = Allegro_scrapping()
-print(scrap.search("gtx 1080", 5, True))
