@@ -13,9 +13,6 @@ import time
 
 
 class Scrapping():
-    def __init__(self):
-        pass
-
 
     def pancernioki(self):
         """Simple scrapping for my father in law"""
@@ -133,7 +130,3 @@ class Allegro_scrapping():
 
 
 
-
-
-scrap = Allegro_scrapping()
-print(scrap.search("gtx 1080", 5, True))

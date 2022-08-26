@@ -1,7 +1,6 @@
 import sys
 import pytest
 import requests
-import sys
 import os
 
 current = os.path.dirname(os.path.realpath(__file__))
@@ -115,6 +114,7 @@ def test_joke_api_fails_unexpected_argument():
 
 
 # ---------------Test Currency API------------------------
+@pytest.mark.currency_test
 def test_currency_api_passes_one_argument():
     """Test if currency api works properly with one argument passed"""
     currency = CurrencyApi()
@@ -125,7 +125,7 @@ def test_currency_api_passes_one_argument():
         pytest.fail(response)
    
 
-
+@pytest.mark.currency_test
 def test_currency_api_passes_two_arguments():
     """Test if currnecy api works with two argument passed"""
     currency = CurrencyApi()
@@ -136,6 +136,7 @@ def test_currency_api_passes_two_arguments():
         pytest.fail(response)
 
 
+@pytest.mark.currency_test
 def test_currency_api_fails_no_argument_passed():
     """Test if currency api rises exception when no argument is passed"""
     currency = CurrencyApi()
@@ -143,6 +144,7 @@ def test_currency_api_fails_no_argument_passed():
         currency.get_custom()
    
 
+@pytest.mark.currency_test
 def test_currnecy_api_fails_to_many_arguments_passed():
     """Test if currency api rises exception when to many arguments are passed"""
     currency = CurrencyApi()
@@ -150,6 +152,7 @@ def test_currnecy_api_fails_to_many_arguments_passed():
         currency.get_custom("BTC", 10, 20, 30)
 
 
+@pytest.mark.currency_test
 def test_currency_api_fails_bad_first_argument_str():
     """Test of currency api rises KeyError exception with bad first argument passed
     some random string"""
@@ -161,7 +164,7 @@ def test_currency_api_fails_bad_first_argument_str():
         pytest.fail(res)
         
 
-
+@pytest.mark.currency_test
 def test_currency_api_fails_bad_first_argument_int():
     """Test if currency api rises KeyError when passed int as a first argument"""
     currency = CurrencyApi()
@@ -172,6 +175,7 @@ def test_currency_api_fails_bad_first_argument_int():
         pytest.fail(res)
 
 
+@pytest.mark.currency_test
 def test_currency_api_fails_bad_second_argument_str():
     """Trst if currency api rises KeyError when passed string as a second argument"""
     currency = CurrencyApi()
