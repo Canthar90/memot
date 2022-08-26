@@ -6,9 +6,10 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver import ActionChains
 from selenium.webdriver.common.keys import Keys
-import time
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 import json
-
+import time
 
 
 class Scrapping():
@@ -55,21 +56,22 @@ class Allegro_scrapping():
         options = ChromeOptions()
         driver = webdriver.Chrome(service=s, options=options)
         action = ActionChains(driver=driver)
-        time.sleep(1)
+        wait = WebDriverWait(driver, 10)
+        
 
         driver.get("https://allegro.pl")
 
-        time.sleep(1)
-        action.key_down(Keys.ENTER)
-        action.key_up(Keys.ENTER)
-        action.perform()
+        cookies_agreement = wait.until(EC.element_to_be_clickable((By.XPATH,
+         """//*[@id="opbox-gdpr-consents-modal"]/div/div[2]/div/div[2]/button[1]""")))
+        
+        action.click(on_element=cookies_agreement)
 
-        time.sleep(1)
         
         
-        search_pole = driver.find_element(
+        
+        search_pole = wait.until(EC.visibility_of_element_located((
             By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input"
-        )
+        )))
 
         
 
@@ -80,11 +82,10 @@ class Allegro_scrapping():
         action.perform()
 
         if by_pricve:
-            print("dupa")
-            time.sleep(2)
-            sorting_selector = driver.find_element(
+            
+            sorting_selector = wait.until(EC.visibility_of_element_located((
                 By.XPATH,
-                """//*[@id="allegro.listing.sort"]""")
+                """//*[@id="allegro.listing.sort"]""")))
             
             action.click(on_element=sorting_selector)
             action.key_down(Keys.ARROW_DOWN)
@@ -92,8 +93,15 @@ class Allegro_scrapping():
             action.key_down(Keys.ENTER)
             action.key_up(Keys.ENTER)
             action.perform()
+            time.sleep(2)
+            
+            
+            
 
-        time.sleep(2)
+        
+
+        wait.until(EC.visibility_of_element_located((By.XPATH,
+            """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[1]/h2/a""")))
 
         main_titles = driver.find_elements(
             By.XPATH,
@@ -122,3 +130,10 @@ class Allegro_scrapping():
             message += "Nie było wystarczająco dużo wyników wyszukiwania"
             driver.quit()
             return message
+
+
+
+
+
+scrap = Allegro_scrapping()
+print(scrap.search("gtx 1080", 5, True))
