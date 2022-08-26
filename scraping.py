@@ -95,38 +95,44 @@ class Allegro_scrapping():
             
             
 
-        
-
-        wait.until(EC.visibility_of_element_located((By.XPATH,
-            """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[1]/h2/a""")))
-
-        main_titles = driver.find_elements(
-            By.XPATH,
-            """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[1]/h2/a""")
-        
-
-        main_prices = driver.find_elements(
-            By.XPATH, 
-            """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[2]/div/div/span""")
-        
-        
-
-        if len(main_titles) == 0:
+        try:
+            invalid = driver.find_element(By.XPATH,
+                """/html/body/div[2]/div[4]/div/div/div/div/div/div[2]/section/h1""")
+            
             return 'Sory nie mogę znaleźć wyników dla tego zapytania'
-        else:
-            message = ''
-            count = 0
-            for title in main_titles:
-                message += f"""Tytuł to: {main_titles[count].text}\nCena to {main_prices[count].text}\n"""
-                message += f"""link: {main_titles[count].get_attribute('href')} \n"""
-                count += 1
-                if count == int(search_number):
-                    driver.quit()
-                    return message
+            
+        except:
 
-            message += "Nie było wystarczająco dużo wyników wyszukiwania"
-            driver.quit()
-            return message
+            wait.until(EC.visibility_of_element_located((By.XPATH,
+                """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[1]/h2/a""")))
+
+            main_titles = driver.find_elements(
+                By.XPATH,
+                """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[1]/h2/a""")
+            
+
+            main_prices = driver.find_elements(
+                By.XPATH, 
+                """//*[@id="search-results"]/div[6]/div/div/div[1]/div/div/section/article/div/div/div[2]/div[2]/div/div/span""")
+            
+            
+
+            if len(main_titles) == 0:
+                return 'Sory nie mogę znaleźć wyników dla tego zapytania'
+            else:
+                message = ''
+                count = 0
+                for title in main_titles:
+                    message += f"""Tytuł to: {main_titles[count].text}\nCena to {main_prices[count].text}\n"""
+                    message += f"""link: {main_titles[count].get_attribute('href')} \n"""
+                    count += 1
+                    if count == int(search_number):
+                        driver.quit()
+                        return message
+
+                message += "Nie było wystarczająco dużo wyników wyszukiwania"
+                driver.quit()
+                return message
 
 
 
