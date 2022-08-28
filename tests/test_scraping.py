@@ -57,3 +57,19 @@ def test_allegro_scrapping_fails_invalid_datatypes(keyword, nr_of_results, flag)
         allegro_scraping.search(keyword, nr_of_results, flag)
     assert "Invalid data type" in str(err.value)
     
+
+def test_allegro_scrapping_fails_to_many_arguments():
+    """Test if Allegro scraping rises TypeError when to many arguments passed"""
+    allegro_scraping = Allegro_scrapping()
+    with pytest.raises(TypeError) as err:
+        allegro_scraping.search("kopytko", 1, False, "unnesesary")
+    assert "takes from 2 to 4 positional arguments" in str(err.value)
+    
+    
+def test_allegro_scrapping_fails_no_args():
+    """Test if Allegro scraping rises TypeError when no arguments passed"""
+    allegro_scraping = Allegro_scrapping()
+    with pytest.raises(TypeError) as err:
+        allegro_scraping.search()
+    assert "missing 1 required positional argument" in str(err.value)
+    
