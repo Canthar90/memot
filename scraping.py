@@ -1,3 +1,4 @@
+from lib2to3.pgen2 import driver
 import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -70,7 +71,7 @@ class Allegro_scrapping():
             """//*[@id="opbox-gdpr-consents-modal"]/div/div[2]/div/div[2]/button[1]""")))
             
             action.click(on_element=cookies_agreement)
-
+            action.perform()
             
             
             
@@ -141,6 +142,57 @@ class Allegro_scrapping():
                     message += "Nie było wystarczająco dużo wyników wyszukiwania"
                     driver.quit()
                     return message
+                
+                
+
+class XcomScraping:
+    """Simple scraping on demand from xcom webside """
+
+    
+    def search(self, question: str, number: int = 1, flag: bool = False) -> None:
+        """Search for reasults on xcom depending on the inputs flag is sorting 
+        from the cheapest reasult"""
+        self.check_for_errors(question=question, number=number, flag=flag)
+    
+    
+    def check_for_errors(self, question: str, number: int, flag: bool) -> None:
+        """Checks data formats of inputs from outside"""
+        if type(question) != str:
+            raise ValueError("Bad value type expected str for question")
+        elif type(number) != int:
+            raise ValueError("Bad value type expected int for number")
+        elif type(flag) != bool:
+            raise ValueError("Bad value type expected bool for flag")
+        else:
+            self.checking(question=question, number=number, flag=flag)
+            
+            
+    def checking(self, question: str, number: int, flag: bool):
+        """Makest the scrapping work"""
+        
+        chrome_driver = "./chromedriver/chromedriver.exe"
+        s = Service(chrome_driver)
+        options = ChromeOptions()
+        driver = webdriver.Chrome(service=s, options=options)
+        action = ActionChains(driver=driver)
+        wait = WebDriverWait(driver, 10)
+        
+        driver.get("https://www.x-kom.pl/")
+        click = wait.until(EC.element_to_be_clickable ((By.XPATH, "/html/body/div[2]/div[10]/div/div/div/div[1]/div/div/h3")))
+
+        action.click(on_element = click)
+        action.key_down(Keys.TAB)
+        action.key_up(Keys.TAB)
+        action.key_down(Keys.TAB)
+        action.key_up(Keys.TAB)
+        action.key_down(Keys.TAB)
+        action.key_up(Keys.TAB)
+        action.key_down(Keys.ENTER)
+        action.key_up(Keys.ENTER)
+        action.perform()
+        time.sleep(10)
 
 
 
+xsearch = XcomScraping()
+xsearch.search("rtx 3070")
