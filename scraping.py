@@ -152,7 +152,7 @@ class XcomScraping:
     def search(self, question: str, number: int = 1, flag: bool = False) -> None:
         """Search for reasults on xcom depending on the inputs flag is sorting 
         from the cheapest reasult"""
-        self.check_for_errors(question=question, number=number, flag=flag)
+        return self.check_for_errors(question=question, number=number, flag=flag)
     
     
     def check_for_errors(self, question: str, number: int, flag: bool) -> None:
@@ -164,7 +164,7 @@ class XcomScraping:
         elif type(flag) != bool:
             raise ValueError("Bad value type expected bool for flag")
         else:
-            self.checking(question=question, number=number, flag=flag)
+            return self.checking(question=question, number=number, flag=flag)
             
             
     def checking(self, question: str, number: int, flag: bool):
@@ -206,7 +206,10 @@ class XcomScraping:
 
         if flag:
             by_cheapest = wait.until(EC.visibility_of_element_located((By.XPATH,
-            """//*[@id="react-select-id4--value"]/div[1]""")))
+            """//*[@id="react-select-id4--value-item"]""")))
+
+            # //*[@id="react-select-id4--value"]/div[1]
+            # //*[@id="react-select-id4--value-item"]
 
             action.click(on_element=by_cheapest)
             action.key_down(Keys.ARROW_DOWN)
@@ -225,6 +228,9 @@ class XcomScraping:
         
         print("stage1")
 
+        titles = driver.find_elements(By.XPATH,
+        """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")
+        print(len(titles))
 
         print("stage2")
         message = ""
@@ -238,13 +244,14 @@ class XcomScraping:
             f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[3]/div/div/div/div/span""")
 
             link = driver.find_element(By.XPATH,
-            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[1]/div/a/span/img""")
+            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[1]/div/a""")
+
             print(title.text)
             message += f"""Tytuł to: {title.text}\nCena to: {price.text}\n"""
-            message += f"""Link: {link.text}\n"""
+            message += f"""Link: {link.get_attribute("href")}\n"""
             print("stage4")
         
-        return message
+        return message 
 
 
 
