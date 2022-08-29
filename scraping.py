@@ -178,7 +178,9 @@ class XcomScraping:
         wait = WebDriverWait(driver, 10)
         
         driver.get("https://www.x-kom.pl/")
-        click = wait.until(EC.element_to_be_clickable ((By.XPATH, "/html/body/div[2]/div[10]/div/div/div/div[1]/div/div/h3")))
+        click = wait.until(EC.visibility_of_element_located ((By.XPATH, """/html/body/div[1]/div[1]/header/div[1]/div[3]/div/div/div""")))
+        # //*[@id="react-portals"]/div[10]/div/div/div/div[1]
+        # /html/body/div[2]/div[10]/div/div/div/div[1]/div/div/h3
 
         action.click(on_element = click)
         action.key_down(Keys.TAB)
@@ -190,9 +192,61 @@ class XcomScraping:
         action.key_down(Keys.ENTER)
         action.key_up(Keys.ENTER)
         action.perform()
-        time.sleep(10)
+        
+        time.sleep(1)
+        search_bar = wait.until(EC.visibility_of_element_located((By.XPATH,
+        """/html/body/div[1]/div[1]/header/div[1]/div[3]/div/div/div/div""")))
+        
+        action.click(on_element=search_bar)
+        action.send_keys(question)
+        action.key_down(Keys.ENTER)
+        action.key_up(Keys.ENTER)
+        action.perform()
+        time.sleep(2)
+
+        if flag:
+            by_cheapest = wait.until(EC.visibility_of_element_located((By.XPATH,
+            """//*[@id="react-select-id4--value"]/div[1]""")))
+
+            action.click(on_element=by_cheapest)
+            action.key_down(Keys.ARROW_DOWN)
+            action.key_up(Keys.ARROW_DOWN)
+            action.key_down(Keys.ARROW_DOWN)
+            action.key_up(Keys.ARROW_DOWN)
+            action.key_down(Keys.ARROW_DOWN)
+            action.key_up(Keys.ARROW_DOWN)
+            action.key_down(Keys.ENTER)
+            action.key_up(Keys.ENTER)
+            action.perform()
+
+            wait.until(EC.visibility_of_element_located((By.XPATH,
+            "/html/body/div[1]/div[2]/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div/div[2]")))
+            time.sleep(10)
+        
+        print("stage1")
+
+
+        print("stage2")
+        message = ""
+        for number in range(0, number):
+            print(number)
+            print("stage3")
+            title = driver.find_element(By.XPATH,
+            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[2]/div[1]/a/h3/span""")
+
+            price = driver.find_element(By.XPATH,
+            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[3]/div/div/div/div/span""")
+
+            link = driver.find_element(By.XPATH,
+            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[1]/div/a/span/img""")
+            print(title.text)
+            message += f"""Tytuł to: {title.text}\nCena to: {price.text}\n"""
+            message += f"""Link: {link.text}\n"""
+            print("stage4")
+        
+        return message
 
 
 
 xsearch = XcomScraping()
-xsearch.search("rtx 3070")
+print(xsearch.search("rtx 3070", 3, True))
