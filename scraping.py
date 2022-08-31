@@ -230,13 +230,13 @@ class XcomScraping:
         if number_of_reasults >= number:
             return self.message_making(number=number, driver=driver)
         elif number_of_reasults < number and number_of_reasults > 0:
-            return self.message_making(number=number_of_reasults, driver=driver)
+            return self.message_making(number=number_of_reasults, driver=driver, modyfied=True)
         else: 
             return "There is no reasults for this phraze"
         
 
 
-    def message_making(self, number, driver):
+    def message_making(self, number, driver, modyfied=False):
         """Compose message dependig on numer of reasults"""
         
         message = ""
@@ -254,5 +254,7 @@ class XcomScraping:
 
             message += f"""Tytuł to: {title.text}\nCena to: {price.text}\n"""
             message += f"""Link: {link.get_attribute("href")}\n"""
-               
+        
+        if modyfied:
+            message += "There was not enought results we i passed all that i was able to find"       
         return message 
