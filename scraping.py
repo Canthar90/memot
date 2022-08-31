@@ -72,14 +72,14 @@ class Allegro_scrapping():
             
             action.click(on_element=cookies_agreement)
             action.perform()
-            
-            
-            
-            search_pole = wait.until(EC.visibility_of_element_located((
-                By.XPATH, "/html/body/div[3]/div[2]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input"
-            )))
 
             
+            try:
+                search_pole = wait.until(EC.visibility_of_element_located((By.XPATH,
+                """/html/body/div[2]/div[2]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input""")))
+            except:
+                search_pole = wait.until(EC.visibility_of_element_located((By.XPATH,
+                """/html/body/div[3]/div[2]/div/div/div/div/div/div[3]/header/div/div/div/div/form/input""")))
 
             action.click(on_element=search_pole)
             action.send_keys(search_word)
@@ -220,17 +220,19 @@ class XcomScraping:
             "/html/body/div[1]/div[2]/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div/div[2]")))
             time.sleep(10)
         
-
-        titles = driver.find_elements(By.XPATH,
-        """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")
-        number_of_reasults = len(titles)
+        try:
+            titles = driver.find_elements(By.XPATH,
+            """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")
+            number_of_reasults = len(titles)
+        except:
+            number_of_reasults = 0
 
         if number_of_reasults >= number:
             return self.message_making(number=number, driver=driver)
-        elif number_of_reasults < number:
+        elif number_of_reasults < number and number_of_reasults > 0:
             return self.message_making(number=number_of_reasults, driver=driver)
         else: 
-            return "There is no reasults for this phrase"
+            return "There is no reasults for this phraze"
         
 
 
@@ -254,4 +256,3 @@ class XcomScraping:
             message += f"""Link: {link.get_attribute("href")}\n"""
                
         return message 
-
