@@ -179,9 +179,7 @@ class XcomScraping:
         
         driver.get("https://www.x-kom.pl/")
         click = wait.until(EC.visibility_of_element_located ((By.XPATH, """/html/body/div[1]/div[1]/header/div[1]/div[3]/div/div/div""")))
-        # //*[@id="react-portals"]/div[10]/div/div/div/div[1]
-        # /html/body/div[2]/div[10]/div/div/div/div[1]/div/div/h3
-
+        
         action.click(on_element = click)
         action.key_down(Keys.TAB)
         action.key_up(Keys.TAB)
@@ -205,15 +203,11 @@ class XcomScraping:
         time.sleep(2)
 
         if flag:
-            by_cheapest = wait.until(EC.visibility_of_element_located((By.XPATH,
-            """//*[@id="react-select-id4--value-item"]""")))
-
-            # //*[@id="react-select-id4--value"]/div[1]
-            # //*[@id="react-select-id4--value-item"]
+            wait.until(EC.presence_of_element_located((By.ID,
+            """react-select-id3--value-item""")))
+            by_cheapest = driver.find_element(By.ID, """react-select-id3--value-item""")
 
             action.click(on_element=by_cheapest)
-            action.key_down(Keys.ARROW_DOWN)
-            action.key_up(Keys.ARROW_DOWN)
             action.key_down(Keys.ARROW_DOWN)
             action.key_up(Keys.ARROW_DOWN)
             action.key_down(Keys.ARROW_DOWN)
@@ -226,34 +220,38 @@ class XcomScraping:
             "/html/body/div[1]/div[2]/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div/div[2]")))
             time.sleep(10)
         
-        print("stage1")
 
         titles = driver.find_elements(By.XPATH,
         """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")
-        print(len(titles))
+        number_of_reasults = len(titles)
 
-        print("stage2")
+        if number_of_reasults >= number:
+            return self.message_making(number=number, driver=driver)
+        elif number_of_reasults < number:
+            return self.message_making(number=number_of_reasults, driver=driver)
+        else: 
+            return "There is no reasults for this phrase"
+        
+
+
+    def message_making(self, number, driver):
+        """Compose message dependig on numer of reasults"""
+        
         message = ""
-        for number in range(0, number):
-            print(number)
-            print("stage3")
+        for num in range(0, number):
+            
+           
             title = driver.find_element(By.XPATH,
-            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[2]/div[1]/a/h3/span""")
+            f"""//*[@id="listing-container"]/div[{num + 1}]/div/div[2]/div[2]/div[1]/a/h3/span""")
 
             price = driver.find_element(By.XPATH,
-            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[3]/div/div/div/div/span""")
+            f"""//*[@id="listing-container"]/div[{num + 1}]/div/div[2]/div[3]/div/div/div/div/span""")
 
             link = driver.find_element(By.XPATH,
-            f"""//*[@id="listing-container"]/div[{number + 1}]/div/div[2]/div[1]/div/a""")
+            f"""//*[@id="listing-container"]/div[{num + 1}]/div/div[2]/div[1]/div/a""")
 
-            print(title.text)
             message += f"""Tytuł to: {title.text}\nCena to: {price.text}\n"""
             message += f"""Link: {link.get_attribute("href")}\n"""
-            print("stage4")
-        
+               
         return message 
 
-
-
-xsearch = XcomScraping()
-print(xsearch.search("rtx 3070", 3, True))
