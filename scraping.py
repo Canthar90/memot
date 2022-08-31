@@ -200,14 +200,19 @@ class XcomScraping:
         action.key_down(Keys.ENTER)
         action.key_up(Keys.ENTER)
         action.perform()
+        wait.until(EC.visibility_of_any_elements_located((By.XPATH,
+        """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")))
         time.sleep(2)
+        
 
         if flag:
             wait.until(EC.presence_of_element_located((By.ID,
             """react-select-id3--value-item""")))
-            by_cheapest = driver.find_element(By.ID, """react-select-id3--value-item""")
+            by_cheapest = driver.find_element(By.ID, """react-select-id4--value-item""")
 
             action.click(on_element=by_cheapest)
+            action.key_down(Keys.ARROW_DOWN)
+            action.key_up(Keys.ARROW_DOWN)
             action.key_down(Keys.ARROW_DOWN)
             action.key_up(Keys.ARROW_DOWN)
             action.key_down(Keys.ARROW_DOWN)
@@ -258,3 +263,6 @@ class XcomScraping:
         if modyfied:
             message += "There was not enought results we i passed all that i was able to find"       
         return message 
+
+# xscrap = XcomScraping()
+# print(xscrap.search("monitor", 10, True))

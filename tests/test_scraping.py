@@ -92,7 +92,7 @@ def test_xcom_scraping_works_one_argument_passed(keyword, expected):
 
 @pytest.mark.xcom_test
 @pytest.mark.parametrize("keyword,number,expected", [("monitor", 10, "Tytuł to"),
-("monitor", 1000000, "There was not enought results"), 
+("monitor", 1000000,  "There was not enought results"), 
 ("kopytko", 1, "There is no reasults for this phraze")])
 def test_xcom_scraping_works_two_argument_passed(keyword, number, expected):
     """Test if Xcom scraping works witch 2 arguments passed"""
@@ -101,4 +101,29 @@ def test_xcom_scraping_works_two_argument_passed(keyword, number, expected):
     assert expected in res
 
 
-    
+@pytest.mark.xcom_test
+@pytest.mark.parametrize("keyword,number,flag,expected", [
+    (1234, 1, False, "Bad value type expected str"), 
+    ("monitor", "bad_arg", False, "Bad value type expected int"),
+    ("monitor", 1, "bad_arg", "Bad value type expected bool")])
+def test_xcom_bad_type_exceptions(keyword, number, flag, expected):
+    """Test if Xcom scraping raises correct ValueErrors when input of bad type passed"""
+    xscrap = XcomScraping()
+    with pytest.raises(ValueError) as err:
+        xscrap.search(keyword, number, flag)
+    assert expected in str(err.value)
+
+
+@pytest.mark.xcom_test
+@pytest.mark.parametrize("keyword,number,flag,expected", [
+    ("monitor", 1, False, "Tytuł to"), ("monitor", 1, True, "Tytuł to"),
+    ("monitor", 10, False, "Tytuł to"), ("monitor", 10, True, "Tytuł to"),
+    ("monitor", 100000, False, "There was not enought results"),
+    ("monitor", 100000, True, "There was not enought results"),
+    ("kopytko", 1, False, "There is no reasults for this phraze"),
+])    
+def test_xcom_works_fine_3_arguments_passed(keyword, number, flag, expected):
+    """Test if xcom scraping search is working fine with all parameters passed"""
+    xscrap = XcomScraping()
+    res = xscrap.search(keyword, number, flag)
+    assert expected in res 
