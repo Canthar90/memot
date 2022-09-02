@@ -178,7 +178,8 @@ class XcomScraping:
         wait = WebDriverWait(driver, 10)
         
         driver.get("https://www.x-kom.pl/")
-        click = wait.until(EC.visibility_of_element_located ((By.XPATH, """/html/body/div[1]/div[1]/header/div[1]/div[3]/div/div/div""")))
+        click = wait.until(EC.visibility_of_element_located ((By.XPATH,
+         """/html/body/div[1]/div[1]/header/div[1]/div[3]/div/div/div""")))
         
         action.click(on_element = click)
         action.key_down(Keys.TAB)
@@ -200,15 +201,20 @@ class XcomScraping:
         action.key_down(Keys.ENTER)
         action.key_up(Keys.ENTER)
         action.perform()
-        wait.until(EC.visibility_of_any_elements_located((By.XPATH,
-        """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")))
-        time.sleep(2)
+        try:
+            wait.until(EC.visibility_of_any_elements_located((By.XPATH,
+            """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")))
+            # time.sleep(2)
+        except:
+            wait.until(EC.visibility_of_element_located((By.XPATH,
+            """//*[@id="app"]/div[2]/div/div[1]/div""")))
+            return "There is no reasults for this phraze"
         
 
         if flag:
             wait.until(EC.presence_of_element_located((By.ID,
             """react-select-id3--value-item""")))
-            by_cheapest = driver.find_element(By.ID, """react-select-id4--value-item""")
+            by_cheapest = driver.find_element(By.ID, """react-select-id5--value-item""")
 
             action.click(on_element=by_cheapest)
             action.key_down(Keys.ARROW_DOWN)
@@ -225,13 +231,11 @@ class XcomScraping:
             "/html/body/div[1]/div[2]/div[4]/div[2]/div[1]/div[2]/div[2]/div[1]/div/div[2]")))
             time.sleep(10)
         
-        try:
-            titles = driver.find_elements(By.XPATH,
-            """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")
-            number_of_reasults = len(titles)
-        except:
-            number_of_reasults = 0
-
+        
+        titles = driver.find_elements(By.XPATH,
+        """//*[@id="listing-container"]/div/div/div[2]/div[2]/div[1]/a/h3/span""")
+        number_of_reasults = len(titles)
+        
         if number_of_reasults >= number:
             return self.message_making(number=number, driver=driver)
         elif number_of_reasults < number and number_of_reasults > 0:
@@ -261,8 +265,6 @@ class XcomScraping:
             message += f"""Link: {link.get_attribute("href")}\n"""
         
         if modyfied:
-            message += "There was not enought results we i passed all that i was able to find"       
+            message += "There was not enought results i passed all that i was able to find"       
         return message 
 
-# xscrap = XcomScraping()
-# print(xscrap.search("monitor", 10, True))
