@@ -19,33 +19,51 @@ class Garbagson:
 
         plastiki_dt = []
         for elem in self.garbage_dict['Plastiki']:
-            new = datetime.strptime(elem, '%d/%m/%Y')
-            plastiki_dt.append(new.date())
+            try:
+                new = datetime.strptime(elem, '%d/%m/%Y')
+                plastiki_dt.append(new.date())
+            except ValueError:
+                self.garbage_dict["Plastiki"].remove(elem)
 
         mieszane_dt = []
         for elem in self.garbage_dict['Mieszane']:
-            new = datetime.strptime(elem, '%d/%m/%Y')
-            mieszane_dt.append(new.date())
+            try:    
+                new = datetime.strptime(elem, '%d/%m/%Y')
+                mieszane_dt.append(new.date())
+            except ValueError:
+                self.garbage_dict['Mieszane'].remove(elem)
 
         szklo_dt = []
         for elem in self.garbage_dict['Szklo']:
-            new = datetime.strptime(elem, '%d/%m/%Y')
-            szklo_dt.append(new.date())
+            try:
+                new = datetime.strptime(elem, '%d/%m/%Y')
+                szklo_dt.append(new.date())
+            except ValueError:
+                self.garbage_dict['Szklo'].remove(elem)
 
         bio_dt = []
         for elem in self.garbage_dict['Bio']:
-            new = datetime.strptime(elem, '%d/%m/%Y')
-            bio_dt.append(new.date())
+            try:
+                new = datetime.strptime(elem, '%d/%m/%Y')
+                bio_dt.append(new.date())
+            except ValueError:
+                self.garbage_dict['Bio'].remove(elem)
 
         gabaryty_dt = []
         for elem in self.garbage_dict['Gabaryty']:
-            new = datetime.strptime(elem, '%d/%m/%Y')
-            gabaryty_dt.append(new.date())
+            try:
+                new = datetime.strptime(elem, '%d/%m/%Y')
+                gabaryty_dt.append(new.date())
+            except ValueError:
+                self.garbage_dict['Gabaryty'].remove(elem)
 
         popioły_dt = []
         for elem in self.garbage_dict['Popioly']:
-            new = datetime.strptime(elem, '%d/%m/%Y')
-            popioły_dt.append(new.date())
+            try:
+                new = datetime.strptime(elem, '%d/%m/%Y')
+                popioły_dt.append(new.date())
+            except ValueError:
+                self.garbage_dict['Popioly'].remove(elem)
 
         message = 'Upcoming garbage: \n'
 

@@ -99,11 +99,8 @@ class Allegro_scrapping():
                 action.key_down(Keys.ENTER)
                 action.key_up(Keys.ENTER)
                 action.perform()
-                time.sleep(2)
+                           
                 
-                
-                
-
             try:
                 invalid = driver.find_element(By.XPATH,
                     """/html/body/div[2]/div[4]/div/div/div/div/div/div[2]/section/h1""")
