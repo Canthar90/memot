@@ -1,3 +1,4 @@
+from asyncio import events
 import sys
 import pytest
 import os
@@ -7,7 +8,7 @@ current = os.path.dirname(os.path.realpath(__file__))
 
 parent = os.path.dirname(current)
 
-from datson import Garbagson
+from datson import Garbagson, Events
 
 
 # -------------Test Garbage Class------------------
@@ -56,3 +57,102 @@ def test_garbagson_fails_argument_passed():
 
 
 # ------------------Events testing-----------------
+@pytest.fixture
+def current_day():
+    current = dt.date.today()
+    ref_current = {"Descriprion1": [current.strftime('%Y-%m-%d'), " " ]}
+    out_current = current.strftime('%Y-%m-%d')
+    return ref_current, out_current
+
+
+@pytest.fixture
+def future_4_days():
+    current = dt.date.today()
+    future = current + dt.timedelta(days=4)
+    ref_future = {"Description2": [future.strftime('%Y-%m-%d'), ' ']}
+    out_future = future.strftime('%Y-%m-%d')
+    return ref_future
+
+
+@pytest.fixture
+def future_8_days():
+    current = dt.date.today()
+    future8 = current + dt.timedelta(days=8)
+    ref_future8 = {"Description3": [future8.strftime('%Y-%m-%d'), ' ']}
+    out_future8 = future8.strftime("%Y-%m-%d")
+    return ref_future8
+
+
+@pytest.fixture
+def past_4_days():
+    current = dt.date.today()
+    past4 = current - dt.timedelta(days=4)
+    ref_past4 = {"Description4": [past4.strftime('%Y-%m-%d'), ' ']}
+    out_past4 = past4.strftime('%Y-%m-%d')
+    return ref_past4
+
+
+@pytest.mark.events_test
+def test_current_date_checking_works(current_day):
+    """Test if Event checking works with one parameter passed"""
+    data, expected = current_day
+    events = Events()
+    events.events_dict = data
+    res = events.event_detection()
+    assert data in res
+
+
+@pytest.mark.events_test
+def test_future_4_days_date_works(future_4_days):
+    """Test if Event checking works with date + 4 days from now"""
+    data = future_4_days
+    events = Events()
+    events.events_dict = data
+    res = events.event_detection()
+    assert data in res
+
+
+@pytest.mark.events_test
+def test_future_8_days_not_passed(future_8_days):
+    """Test if Event from future +7 days is not returned"""
+    data = future_8_days
+    events = Events()
+    events.events_dict = data
+    res = events.event_detection()
+    assert data not in res
+
+
+@pytest.mark.events_test
+def test_past_4_days_not_passed(past_4_days):
+    """Test if Event from the past -4 days is not returned"""
+    data = past_4_days
+    events = Events()
+    events.events_dict = data
+    res = events.event_detection()
+    assert data not in res
+
+
+@pytest.fixture
+def all_dates():
+    currentday = current_day
+    future4_days = future_4_days
+    future8_days = future_8_days
+    past4_days = past_4_days
+    all_data = {
+        currentday,
+        future4_days,
+        future8_days,
+        past4_days
+    }
+    return all_data, currentday, future4_days, future8_days, past4_days
+
+
+@pytest.mark.events_test
+def test_all_dates_passed(all_dates):
+    """Test if all dates future past and current are displayed
+    properly in response"""
+    data, current, future4, future8, past4 = all_dates
+    events = Events()
+    events.events_dict = data
+    res = events.event_detection()
+    assert (current in res) and (future4 in res) and (future8 not in res) and (past4 not in res)
