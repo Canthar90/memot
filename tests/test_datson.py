@@ -62,7 +62,7 @@ def current_day():
     current = dt.date.today()
     ref_current = {"Descriprion1": [current.strftime('%Y-%m-%d'), " " ]}
     out_current = current.strftime('%Y-%m-%d')
-    return ref_current, out_current
+    return ref_current
 
 
 @pytest.fixture
@@ -95,7 +95,7 @@ def past_4_days():
 @pytest.mark.events_test
 def test_current_date_checking_works(current_day):
     """Test if Event checking works with one parameter passed"""
-    data, expected = current_day
+    data = current_day
     events = Events()
     events.events_dict = data
     res = events.event_detection()
@@ -134,15 +134,19 @@ def test_past_4_days_not_passed(past_4_days):
 
 @pytest.fixture
 def all_dates():
-    currentday = current_day
-    future4_days = future_4_days
-    future8_days = future_8_days
-    past4_days = past_4_days
+    current = dt.date.today()
+    currentday = {"Descriprion1": [current.strftime('%Y-%m-%d'), " " ]}
+    future = current + dt.timedelta(days=4)
+    future4_days = {"Description2": [future.strftime('%Y-%m-%d'), ' ']}
+    future8 = current + dt.timedelta(days=8)
+    future8_days = {"Description3": [future8.strftime('%Y-%m-%d'), ' ']}
+    past4 = current - dt.timedelta(days=4)
+    past4_days = {"Description4": [past4.strftime('%Y-%m-%d'), ' ']}
     all_data = {
-        currentday,
-        future4_days,
-        future8_days,
-        past4_days
+        "Descriprion1": [current.strftime('%Y-%m-%d'), " " ],
+        "Description2": [future.strftime('%Y-%m-%d'), ' '],
+        "Description3": [future8.strftime('%Y-%m-%d'), ' '],
+        "Description4": [past4.strftime('%Y-%m-%d'), ' ']
     }
     return all_data, currentday, future4_days, future8_days, past4_days
 
@@ -154,5 +158,6 @@ def test_all_dates_passed(all_dates):
     data, current, future4, future8, past4 = all_dates
     events = Events()
     events.events_dict = data
-    res = events.event_detection()
-    assert (current in res) and (future4 in res) and (future8 not in res) and (past4 not in res)
+    resflag, res = events.event_detection()
+    assert (next(iter(current)) in res) and (next(iter(future4)) in res) and\
+         (next(iter(future8)) not in res) and (next(iter(past4)) not in res)
