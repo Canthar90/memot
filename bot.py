@@ -129,11 +129,15 @@ async def on_message(ctx):
     
 
     if papa == 1 and message.author == client.user:
-        if ctx.guild.voice_client:
-            ctx.guild.voice_client.stop()
+        try:
+            if ctx.guild.voice_client:
+                ctx.guild.voice_client.stop()
+                papa = 0
+                sound = FFmpegPCMAudio(starting["barka"])
+                await ctx.guild.voice_client.play(sound)
+        except:
             papa = 0
-            sound = FFmpegPCMAudio(starting["barka"])
-            await ctx.guild.voice_client.play(sound)
+
 
     if "hello there" in user_message.lower() or "lightsaber" in user_message.lower():
         grevious = random.choice(greviouses)

@@ -142,6 +142,7 @@ class Events:
             current_time = dt.date.today()
             future = current_time + timedelta(days=7)
             for key in self.events_dict:
+                
                 event_time = datetime.strptime(self.events_dict[key][0], "%Y-%m-%d").date()
                 if (event_time >= current_time) and (event_time <= future):
                     matching_event_dict[key] = self.events_dict[key]
@@ -150,6 +151,15 @@ class Events:
                 return True, matching_event_dict
             else:
                 return False, {}
+
+    
+    def past_event_cleaning(self):
+        current_time = dt.date.today()
+        for key in self.events_dict:
+            event_time = datetime.strptime(self.events_dict[key][0], "%Y-%m-%d").date()
+            if (event_time < current_time):
+                del self.events_dict[key]
+        return "cleaned"
 
 
 class CyclicEvents:

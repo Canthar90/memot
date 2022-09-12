@@ -167,16 +167,24 @@ def test_all_dates_passed(all_dates):
 
 @pytest.mark.events_test
 @patch.object(Events, 'save')
-def test_saving_events_passes(mock_my_method):
+def test_saving_events_current_passes(mock_my_method, current_day):
     """Test if saving date passes witrh correct input"""
     mock_my_method.return_value = True
 
-    current = dt.date.today()
-    curr_to_go = current.strftime('%Y-%m-%d')
     events = Events()
-    res = events.add_event(curr_to_go, "event1", 213213442)
+    res = events.add_event(current_day, "event1", 213213442)
     assert "Event added" in res
 
+
+@pytest.mark.events_test
+@patch.object(Events, 'save')
+def test_saving_events_future(mock_my_method, future_4_days):
+    """Test if Events saves correctly events from the future"""
+    mock_my_method.return_value = True
+
+    events = Events()
+    res = events.add_event(future_4_days, "event2", 23123213213)
+    assert "Event added" in res
     
     
     
