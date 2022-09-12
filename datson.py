@@ -110,6 +110,7 @@ class Events:
         """Lauthing starting functions"""
         self.load()
 
+
     def load(self):
         """Loading starting files if they exist"""
         try:
@@ -118,16 +119,19 @@ class Events:
         except:
             self.events_dict = {}
 
+
     def save(self):
         """Saving dictionary to file"""
         with open("events.json", "w") as file:
             json.dump(self.events_dict, file)
+
 
     def add_event(self, date, title, channel):
         """Adding event to events dictionary"""
         self.events_dict[title] = [date, channel]
         self.save()
         return "Event added"
+
 
     def event_detection(self):
         """detect if there is any events upcoming"""

@@ -1,5 +1,6 @@
 from asyncio import events
 import sys
+from unittest import mock
 import pytest
 import os
 import datetime as dt
@@ -9,6 +10,7 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 
 from datson import Garbagson, Events
+from unittest.mock import Mock, patch
 
 
 # -------------Test Garbage Class------------------
@@ -161,3 +163,20 @@ def test_all_dates_passed(all_dates):
     resflag, res = events.event_detection()
     assert (next(iter(current)) in res) and (next(iter(future4)) in res) and\
          (next(iter(future8)) not in res) and (next(iter(past4)) not in res)
+
+
+@pytest.mark.events_test
+@patch.object(Events, 'save')
+def test_saving_events_passes(mock_my_method):
+    """Test if saving date passes witrh correct input"""
+    mock_my_method.return_value = True
+
+    current = dt.date.today()
+    curr_to_go = current.strftime('%Y-%m-%d')
+    events = Events()
+    res = events.add_event(curr_to_go, "event1", 213213442)
+    assert "Event added" in res
+
+    
+    
+    
