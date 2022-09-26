@@ -3,7 +3,6 @@ import random
 import time
 import logging
 from datetime import datetime
-from tkinter.tix import Tree
 import discord
 from discord.ext.commands import Bot
 import json
@@ -14,7 +13,7 @@ from apis import Weather_forecasting, RandoCatApi, LOTRapi, JokeApi, CurrencyApi
 from discord import FFmpegPCMAudio
 
 
-with open("starting.json") as start:
+with open("starting.json", encoding="utf-8") as start:
     starting = json.load(start)
 
 queues = {}
@@ -475,7 +474,7 @@ async def daty_godziny ():
         houer, minnute, sec = dane_czas
 
         if (int(houer) == starting['houer']) and (int(minnute) == starting['minutes']) and papa == 0:
-            pull = random.randint(1, 2)
+            pull = random.randint(1, 7)
             papa = 1
             if pull == 1:
                 await samo_jedzonko.send(starting["special_quote1.1"])
@@ -487,6 +486,27 @@ async def daty_godziny ():
                 await samo_jedzonko.send(starting["special_quote2.2"])
                 time.sleep(3)
                 await samo_jedzonko.send(file=discord.File(starting["special_jpg2"]))
+            elif pull == 3:
+                await samo_jedzonko.send(starting["special_quote_3"])
+                await samo_jedzonko.send(file=discord.File(starting["special_gif_3"]))
+            elif pull == 4:
+                await samo_jedzonko.send(starting["special_quote_4"])
+                time.sleep(1)
+                await samo_jedzonko.send(starting["special_quote_4.1"])
+                await samo_jedzonko.send(file=discord.File(starting["special_gif_4"]))
+            elif pull == 5:
+                await samo_jedzonko.send(starting["special_quote_5"])
+                time.sleep(2)
+                await samo_jedzonko.send(file=discord.File(starting["special_file_5"]))
+                await samo_jedzonko.send(starting["special_quote_5.1"])
+            elif pull == 6:
+                await samo_jedzonko.send(starting["special_quote_6"])
+                time.sleep(1)
+                await samo_jedzonko.send(starting["special_quote_6.1"])
+                await samo_jedzonko.send(file=discord.File(starting["special_gif_6"]))
+            elif pull == 7:
+                await samo_jedzonko.send(starting["special_quote_7"])
+                await samo_jedzonko.send(file=discord.File(starting["special_file_7"]))
         elif int(houer) == 21 and int(minnute) == 38:
             papa = 0
 
