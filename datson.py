@@ -126,11 +126,26 @@ class Events:
             json.dump(self.events_dict, file)
 
 
+    def date_check(self, date) -> bool:
+        """Simple function checking if date of the event is in the future"""
+        event_date = datetime.strptime(date, "%Y-%m-%d").date()
+        current_time = dt.date.today()
+        if current_time > event_date:
+            return False
+        else:
+            return True
+
+
     def add_event(self, date, title, channel):
         """Adding event to events dictionary"""
-        self.events_dict[title] = [date, channel]
-        self.save()
-        return "Event added"
+        checking_date = self.date_check(date)
+        if checking_date:
+            self.events_dict[title] = [date, channel]
+            self.save()
+            return "Event added"
+        else:
+            return "Given event date is in the past. Therefor event was not added\
+             \nTherefore it was not added"
 
 
     def event_detection(self):
