@@ -200,3 +200,17 @@ def test_saving_events_past_reaction(mock_my_method):
     events = Events()
     res = events.add_event(past_4_days, "event past 4 days", 312321321321)
     assert "Given event date is in the past" in res 
+
+
+@pytest.mark.events_test
+@patch.object(Events, 'save')
+def test_savin_events_future_more_than_7(mock_my_method):
+    """Test if Events save react correctly when user wat to add
+    event located in more than 7 days in the future"""
+    mock_my_method.return_value = True
+
+    future_8 = dt.date.today() + dt.timedelta(days=8)
+    future_8_days = dt.datetime.strftime(future_8, "%Y-%m-%d")
+    events = Events()
+    res = events.add_event(future_8_days, "event 8 days future", 3213213213)
+    assert "Event added" in res
