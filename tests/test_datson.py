@@ -1,4 +1,3 @@
-from asyncio import events
 import sys
 from unittest import mock
 import pytest
@@ -167,10 +166,11 @@ def test_all_dates_passed(all_dates):
 
 @pytest.mark.events_test
 @patch.object(Events, 'save')
-def test_saving_events_current_passes(mock_my_method, current_day):
+def test_saving_events_current_passes(mock_my_method):
     """Test if saving date passes witrh correct input"""
     mock_my_method.return_value = True
-
+    current = dt.date.today()
+    current_day = dt.datetime.strftime(current, "%Y-%m-%d")
     events = Events()
     res = events.add_event(current_day, "event1", 213213442)
     assert "Event added" in res
@@ -178,13 +178,25 @@ def test_saving_events_current_passes(mock_my_method, current_day):
 
 @pytest.mark.events_test
 @patch.object(Events, 'save')
-def test_saving_events_future(mock_my_method, future_4_days):
+def test_saving_events_future(mock_my_method):
     """Test if Events saves correctly events from the future"""
     mock_my_method.return_value = True
-
+    future_4 = dt.date.today() + dt.timedelta(days=4)
+    future_4_days = dt.datetime.strftime(future_4, "%Y-%m-%d")
     events = Events()
     res = events.add_event(future_4_days, "event2", 23123213213)
     assert "Event added" in res
     
     
-    
+@pytest.mark.events_test
+@patch.object(Events, 'save')
+def test_saving_events_past_reaction(mock_my_method):
+    """Test if Events react correctly when user want to add event
+     with date from the past"""
+    mock_my_method.return_value = True
+
+    past_4 = dt.date.today() - dt.timedelta(days=4)
+    past_4_days = dt.datetime.strftime(past_4, "%Y-%m-%d")
+    events = Events()
+    res = events.add_event(past_4_days, "event past 4 days", 312321321321)
+    assert "Given event date is in the past" in res 
