@@ -126,26 +126,36 @@ class Events:
             json.dump(self.events_dict, file)
 
 
-    def date_check(self, date) -> bool:
+    def date_check(self, date, title, channel) -> bool:
         """Simple function checking if date of the event is in the future"""
-        event_date = datetime.strptime(date, "%Y-%m-%d").date()
-        current_time = dt.date.today()
-        if current_time > event_date:
-            return False
+        if type(date) != str:
+            return False, "Bad data type for data it should be YYYY-MM-DD"
+        elif type(title) != str:
+            return False, "Bad data type for description you should pass text"
+        elif type(channel) != int:
+            return False, "Bad data type for channel internal error"
         else:
-            return True
+            try:
+                event_date = datetime.strptime(date, "%Y-%m-%d").date()
+                current_time = dt.date.today()
+                if current_time > event_date:
+                    return False , "Given event date is in the past. Therefor event was not added\
+                \nTherefore it was not added"
+                else:
+                    return True, "all ok"
+            except:
+                return False, "Bad data type for data it should be YYYY-MM-DD"
 
 
-    def add_event(self, date, title, channel):
+    def add_event(self, date: str, title: str, channel: int):
         """Adding event to events dictionary"""
-        checking_date = self.date_check(date)
+        checking_date, response = self.date_check(date, title, channel)
         if checking_date:
             self.events_dict[title] = [date, channel]
             self.save()
             return "Event added"
         else:
-            return "Given event date is in the past. Therefor event was not added\
-             \nTherefore it was not added"
+            return response
 
 
     def event_detection(self):

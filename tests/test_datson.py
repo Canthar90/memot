@@ -214,3 +214,20 @@ def test_savin_events_future_more_than_7(mock_my_method):
     events = Events()
     res = events.add_event(future_8_days, "event 8 days future", 3213213213)
     assert "Event added" in res
+
+
+@pytest.mark.events_test
+@pytest.mark.parametrize("date,title,channel,expected" ,[
+    (12321321, "test_title1", 21321321321, "Bad data type for data it should be YYYY-MM-DD"),
+    ("112312-312-11123", "test_title2", 21312323, "Bad data type for data it should be YYYY-MM-DD"),
+    (dt.datetime.strftime(dt.date.today(), "%Y-%m-%d"), 3231231, 2321423213, "Bad data type for description you should pass text"),
+    (dt.datetime.strftime(dt.date.today(), "%Y-%m-%d"), "test_title3", "string", "Bad data type for channel internal error")
+])
+@patch.object(Events, 'save')
+def test_saving_future_bad_data_fails(mock_my_method, date, title, channel, expected):
+    """Test if Events save reacts to bad data type or nonsence data"""
+    mock_my_method.return_value = True
+
+    events = Events()
+    res = events.add_event(date, title, channel)
+    assert expected in res
