@@ -8,7 +8,7 @@ current = os.path.dirname(os.path.realpath(__file__))
 
 parent = os.path.dirname(current)
 
-from datson import Garbagson, Events
+from datson import Garbagson, Events, CyclicEvents
 from unittest.mock import Mock, patch
 
 
@@ -231,3 +231,41 @@ def test_saving_future_bad_data_fails(mock_my_method, date, title, channel, expe
     events = Events()
     res = events.add_event(date, title, channel)
     assert expected in res
+    
+    
+# ------------------------------------ Cyclic Evnets testing-------------------------------------
+@pytest.fixture
+def data_for_cyclic():
+    """Fixture hodling all data for all data to cyclic events class testing
+    one date 4 days in the past one current date one two dates in the future
+    one 4 days in the future one 16 days"""
+    current_day = dt.date.today()
+    current_date = dt.datetime.strftime(current_day, "%m-%d")
+    past_4days = current_day - dt.timedelta(days=4)
+    past_4_days_date = dt.datetime.strftime(past_4days, "%m-%d")
+    future_4days = current_day + dt.timedelta(days=4)
+    future_4_days_date = dt.datetime.strftime(future_4days, "%m-%d")
+    future_16days = current_day + dt.timedelta(days=16)
+    future_16_days_date = dt.datetime.strftime(future_16days, "%m-%d")
+    
+    data_frame = {"Title description current":[current_date, 3214213213213],
+                  "Title description past 4":[past_4_days_date, 688787678676],
+                  "Title description future 4":[future_4_days_date, 3214352321],
+                  "Title description future 16": [future_16_days_date, 3124532412]}
+    
+    return data_frame, current_date, past_4_days_date, future_4_days_date,\
+        future_16_days_date
+
+
+@pytest.mark.cyclic_events_test
+def test_cyclic_events_passes(data_for_cyclic):
+    """Tests if cyclic events works fine with data for the future and past"""
+    data_frame, current, past4, future4, future16 = data_for_cyclic
+    cyclic_events = CyclicEvents()
+    cyclic_events.cyclic_events = data_frame
+    flag, res = cyclic_events.event_detection()
+    refactored_res = []
+    for key in res:
+        refactored_res.append(res[key][0])
+    assert current in refactored_res and past4 not in refactored_res and future4 in refactored_res \
+        and future16 not in refactored_res
