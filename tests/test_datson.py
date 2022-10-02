@@ -162,6 +162,15 @@ def test_all_dates_passed(all_dates):
     resflag, res = events.event_detection()
     assert (next(iter(current)) in res) and (next(iter(future4)) in res) and\
          (next(iter(future8)) not in res) and (next(iter(past4)) not in res)
+         
+         
+@pytest.mark.events_test
+def test_event_detection_fails_argument_passed():
+    """Test if event detection fails with any atgument passed"""
+    events = Events()
+    with pytest.raises(TypeError) as err:
+        events.event_detection("argument")
+    assert "takes 1 positional argument" in str(err.value)
 
 
 @pytest.mark.events_test
@@ -233,6 +242,15 @@ def test_saving_future_bad_data_fails(mock_my_method, date, title, channel, expe
     assert expected in res
     
     
+@pytest.mark.events_test
+def test_saving_fails_to_many_arguments():
+    """Test if saving fails with to many arguments passed"""
+    events = Events()
+    with pytest.raises(TypeError) as err:
+        events.add_event("3000-12-12", "future event", 32142134214, "extra")
+    assert "takes 4 positional arguments" in str(err.value)
+        
+    
 # ------------------------------------ Cyclic Evnets testing-------------------------------------
 @pytest.fixture
 def data_for_cyclic():
@@ -269,3 +287,13 @@ def test_cyclic_events_passes(data_for_cyclic):
         refactored_res.append(res[key][0])
     assert current in refactored_res and past4 not in refactored_res and future4 in refactored_res \
         and future16 not in refactored_res
+        
+        
+@pytest.mark.cyclic_events_test
+def test_cyclic_events_fails_with_argument():
+    """Test if cyclic events fails when any argument passed with event detection"""
+    cyclic_events = CyclicEvents()
+    
+    with pytest.raises(TypeError) as err:
+        cyclic_events.event_detection("nonsence")
+    assert "takes 1 positional" in str(err.value)
