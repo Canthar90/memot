@@ -190,8 +190,10 @@ class Events:
 class CyclicEvents:
     """Class holding cyclic events like birthdays for example date"""
 
+
     def __init__(self):
         self.load()
+
 
     def load(self):
         """Loading data files if file is empty will make empty dictionary"""
@@ -206,11 +208,34 @@ class CyclicEvents:
         with open('cyclic_events.json', "w") as file:
             json.dump(self.cyclic_events, file)
 
+
+    def check_input_data(self, date, title, channel):
+        """Checke if data passed to add_tiem are correct type
+        and if date is valid"""
+        if type(date) != str:
+            return False, "Invalid data format expected string"
+        elif type(title) != str:
+            return False, "Invalid description format expected string"
+        elif type(channel) != int:
+            return False, "Internal error invalid channel data type"
+        else:
+            try:
+                dt.datetime.strftime(date, '%m-%d')
+                return True, "All ok"
+            except:
+                return False, "Given date is invalid"
+
+
     def add_item(self, date, title, channel):
         """Adds new item cyclic item"""
-        self.cyclic_events[title] = [date, channel]
-        self.save()
-        return "Cyclic event added"
+        checkin_flag, response = self.check_input_data(date, title, channel)
+        if checkin_flag:
+            self.cyclic_events[title] = [date, channel]
+            self.save()
+            return "Cyclic event added"
+        else:
+            return response
+
 
     def event_detection(self):
         """Detects if there is any event coming soon"""
