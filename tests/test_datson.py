@@ -297,3 +297,26 @@ def test_cyclic_events_fails_with_argument():
     with pytest.raises(TypeError) as err:
         cyclic_events.event_detection("nonsence")
     assert "takes 1 positional" in str(err.value)
+
+
+@pytest.mark.cyclic_events_test
+@pytest.mark.parametrize("date,title,channel,expected" ,
+[(dt.datetime.strftime(dt.date.today(), "%m-%d"), "current_time_event", 32132141242,
+"Cyclic event added"), (dt.datetime.strftime((dt.date.today() 
++ dt.timedelta(days=4)), "%m-%d"), "future_cyclic_event4", 321321321321, "Cyclic event added"),
+(dt.datetime.strftime((dt.date.today()+dt.timedelta(days=20)) , "%m-%d"), "future_cyclic_event20",
+32131232132, "Cyclic event added"), (dt.datetime.strftime((dt.date.today() - dt.timedelta(days=4)), "%m-%d"),
+"past_cyclic_event4", 32132141243213, "Cyclic event added"),
+(dt.datetime.strftime(dt.date.today(), "%m-%d"), 32132131, 3213214214, "Invalid description format expected string"),
+("312-21321", "Nonsence data", 32213213, "Given date is invalid"),
+(213213, "bad data data type", 65765765, "Invalid data format expected string"),
+(dt.datetime.strftime(dt.date.today(), '%m-%d'), "correct data", "bad type", "Internal error invalid channel data type")
+])
+@patch.object(CyclicEvents, 'save')
+def tests_saving_options(mock_my_method, date, title, channel, expected):
+    """Test bad and god cases of saving cyclic events even bad arguments"""
+    mock_my_method.return_value = True
+
+    cyclic = CyclicEvents()
+    res = cyclic.add_item(date, title, channel)
+    assert expected in res

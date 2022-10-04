@@ -220,9 +220,9 @@ class CyclicEvents:
             return False, "Internal error invalid channel data type"
         else:
             try:
-                dt.datetime.strftime(date, '%m-%d')
+                dt.datetime.strptime(date, '%m-%d')
                 return True, "All ok"
-            except:
+            except: 
                 return False, "Given date is invalid"
 
 
