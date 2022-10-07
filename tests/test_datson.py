@@ -1,4 +1,5 @@
 import sys
+from typing import Type
 from unittest import mock
 import pytest
 import os
@@ -320,3 +321,21 @@ def tests_saving_options(mock_my_method, date, title, channel, expected):
     cyclic = CyclicEvents()
     res = cyclic.add_item(date, title, channel)
     assert expected in res
+
+
+@pytest.mark.cyclic_events_test
+def test_save_error_no_args():
+    """Test if add_item in cyclic events raises Type Error when no parameters passed"""
+    cyclic = CyclicEvents()
+    with pytest.raises(TypeError) as err:
+        cyclic.add_item()
+    assert "missing 3 required positional" in str(err.value)
+
+
+@pytest.mark.cyclic_events_test
+def test_save_error_to_many_args():
+    """Test if add_item in cyclic events raises TypeError when to many args passed"""
+    cyclic = CyclicEvents()
+    with pytest.raises(TypeError) as err:
+        cyclic.add_item("12-12", "Title", 3213213, "one to many")
+    assert "takes 4 positional arguments" in str(err.value)
