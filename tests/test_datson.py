@@ -1,6 +1,3 @@
-import sys
-from typing import Type
-from unittest import mock
 import pytest
 import os
 import datetime as dt
@@ -10,7 +7,7 @@ current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
 
 from datson import Garbagson, Events, CyclicEvents
-from unittest.mock import Mock, patch
+from unittest.mock import patch
 
 
 # -------------Test Garbage Class------------------
@@ -242,7 +239,16 @@ def test_saving_future_bad_data_fails(mock_my_method, date, title, channel, expe
     res = events.add_event(date, title, channel)
     assert expected in res
     
-    
+
+@pytest.mark.events_test
+def test_saving_events_fails_no_args():
+    """Test if saving events fails with no args given"""
+    events = Events()
+    with pytest.raises(TypeError) as err:
+        events.add_event()
+    assert "missing 3 required positional" in str(err.value)
+
+
 @pytest.mark.events_test
 def test_saving_fails_to_many_arguments():
     """Test if saving fails with to many arguments passed"""
