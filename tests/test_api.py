@@ -2,6 +2,7 @@ import sys
 import pytest
 import requests
 import os
+from unittest.mock import patch
 
 current = os.path.dirname(os.path.realpath(__file__))
 
@@ -13,12 +14,16 @@ from apis import RandoCatApi, Weather_forecasting, LOTRapi, JokeApi, CurrencyApi
 
 
 # -----------Testing Cat API-----------------
-def test_random_cat():
+@pytest.mark.cat_api
+@patch.object(RandoCatApi, 'get_random_cat')
+def test_random_cat(mock_ty_method):
     """Test if random cat api works correctly"""
+    mock_ty_method.return_value = "http good cat was picked"
     cats = RandoCatApi()
     assert "http" in cats.get_random_cat()
 
 
+@pytest.mark.cat_api
 def test_random_cat_not_pased():
     """Test if random cat api gives error after passing there unexpected argument"""
     cats = RandoCatApi()
@@ -27,13 +32,18 @@ def test_random_cat_not_pased():
         
 
 # ------------Testing Weather API------------ 
-def test_weather_forecast_pass():
+@pytest.mark.weather_api
+@patch.object(Weather_forecasting, 'requesting')
+def test_weather_forecast_pass(mock_my_method):
     """Test if checking weather forecasting api works with passed correct parameters"""
+    mock_my_method.return_value = "Prognoza pogody dla miasta Torun"
+
     forecasting = Weather_forecasting()
     forecasting.places = {"Torun":  ["53.0137", "18.5981"],}
     assert "Prognoza pogody dla miasta Torun" in forecasting.weather_check()
 
 
+@pytest.mark.weather_api
 def test_weather_forecast_fail_argument_passed():
     """Test if weather foracast gives error after passing unexpected argument"""
     forecasting = Weather_forecasting()
@@ -41,7 +51,8 @@ def test_weather_forecast_fail_argument_passed():
     with pytest.raises(TypeError):
         forecasting.weather_check("Beee")
         
-        
+
+@pytest.mark.weather_api        
 def test_weather_forecast_fail_nonsence_data():
     """Test if weather forecast returns Http Error 400 with nonsence argument passed """
     forecasting = Weather_forecasting()
@@ -51,8 +62,12 @@ def test_weather_forecast_fail_nonsence_data():
     assert "400" in str(err.value)
 
 
-def test_weather_foracast_requesting_passed():
+@pytest.mark.weather_api
+@patch.object(Weather_forecasting, 'requesting')
+def test_weather_foracast_requesting_passed(mock_my_method):
     """Test if forecast requesting passes weather for correct place"""
+    mock_my_method.return_value = "Prognoza pogody dla miasta Watykan"
+
     forecasting = Weather_forecasting()
     forecasting.places = {"Torun": ["53.0137", "18.5981"],
                           "Watykan":  ["41.9024", "12.4533"],  

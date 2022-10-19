@@ -49,11 +49,11 @@ class Allegro_scrapping():
         '''this function will search the search_word and retutrn message containing selected search_number of
             search reasults '''
 
-        if type(search_word) != str:
+        if not isinstance(search_word, str):
             raise ValueError("Invalid data type in search_word expected str")
-        elif type(search_number) != int:
+        elif not isinstance(search_number, int):
             raise ValueError("Invalid data type in search_number expected int")
-        elif type(by_pricve) != bool:
+        elif not isinstance(by_pricve, bool):
             raise ValueError("Invalid data type in by_price expected bool")
         else:
             
@@ -154,11 +154,11 @@ class XcomScraping:
     
     def check_for_errors(self, question: str, number: int, flag: bool) -> None:
         """Checks data formats of inputs from outside"""
-        if type(question) != str:
+        if not isinstance(question, str):
             raise ValueError("Bad value type expected str for question")
-        elif type(number) != int:
+        elif not isinstance(number, int):
             raise ValueError("Bad value type expected int for number")
-        elif type(flag) != bool:
+        elif not isinstance(flag, bool) != bool:
             raise ValueError("Bad value type expected bool for flag")
         else:
             return self.checking(question=question, number=number, flag=flag)

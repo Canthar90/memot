@@ -128,11 +128,11 @@ class Events:
 
     def date_check(self, date, title, channel) -> bool:
         """Simple function checking if date of the event is in the future"""
-        if type(date) != str:
+        if not isinstance(date, str):
             return False, "Bad data type for data it should be YYYY-MM-DD"
-        elif type(title) != str:
+        elif not isinstance(title, str) != str:
             return False, "Bad data type for description you should pass text"
-        elif type(channel) != int:
+        elif not isinstance(channel, int) != int:
             return False, "Bad data type for channel internal error"
         else:
             try:
@@ -212,11 +212,11 @@ class CyclicEvents:
     def check_input_data(self, date, title, channel):
         """Checke if data passed to add_tiem are correct type
         and if date is valid"""
-        if type(date) != str:
+        if not isinstance(date, str):
             return False, "Invalid data format expected string"
-        elif type(title) != str:
+        elif not isinstance(title, str):
             return False, "Invalid description format expected string"
-        elif type(channel) != int:
+        elif not isinstance(channel, int) != int:
             return False, "Internal error invalid channel data type"
         else:
             try:

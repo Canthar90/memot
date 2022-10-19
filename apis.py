@@ -128,7 +128,7 @@ class CurrencyApi:
             "apikey": self.API_KEY
         }
 
-    def get_custom(self, currency_name, ammount=1.0):
+    def get_custom(self, currency_name: str, ammount: int=1.0):
         """Converts passed currency to PLN"""
         custom_url = self.URL + f"?to=PLN&from={currency_name}&amount={ammount}"
         response = requests.get(custom_url, headers=self.header, data={})
@@ -144,7 +144,7 @@ class DrinkApi:
     def __init__(self):
         self.base_url = "http://www.thecocktaildb.com/api/json/v1/1/"
 
-    def search_by_name(self, drink_name):
+    def search_by_name(self, drink_name: str):
         """Searches drink or first of drink list by name"""
         endpoint_url = self.base_url + "search.php?s=" + drink_name
         response = requests.get(endpoint_url)
@@ -156,7 +156,7 @@ class DrinkApi:
         response = requests.get(endpoint_url)
         return self.response_refactor(response=response)
 
-    def response_refactor(self, response):
+    def response_refactor(self, response: str):
         drink = response.json()
         drink = drink["drinks"][0]
         message = ""
@@ -176,7 +176,7 @@ class DrinkApi:
                    f"the recipe: {drink['strInstructions']}"
         return message
 
-    def search_by_ingredient(self, ingredient):
+    def search_by_ingredient(self, ingredient: str):
         """Searchs how many drinks you can do with given ingredient"""
         endpoint_url = self.base_url + "filter.php?i=" + ingredient
         response = requests.get(endpoint_url)
