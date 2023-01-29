@@ -4,7 +4,7 @@ import time
 import logging
 from datetime import datetime
 import discord
-from discord.ext.commands import Bot
+from discord.ext import commands
 import json
 from scraping import Scrapping, Allegro_scrapping
 import asyncio
@@ -49,8 +49,13 @@ async def queueing(ctx, *args):
     await ctx.send("Added to queue")
 
 TOKEN = starting['token']
+intents = discord.Intents.default()
+intents.message_content = True
 
-client = Bot('!')
+client = discord.Client(intents=intents, )
+client = commands.Bot(intents=intents , command_prefix="!")
+
+# client = Bot(command_prefix='!')
 
 scrap = Scrapping()
 
@@ -68,8 +73,10 @@ greviouses = [x for x in os.listdir(greviouses_path) if os.path.isfile(os.path.j
 
 @client.event
 async def on_ready():
-
+    await asyncio.sleep(3)
     logging.info('We are login as {0.user}'.format(client))
+    await daty_godziny()
+    
 
 
 jarkendar = client.get_channel(starting['jarkendar'])
@@ -86,6 +93,8 @@ allegros = Allegro_scrapping()
 papa = 0
 
 fileNameArray = [x for x in os.listdir("./memowo") if os.path.isfile(os.path.join("./memowo", x))]
+
+
 
 
 @client.event
@@ -456,16 +465,21 @@ async def exchange(ctx, currnency_name, amount=None):
 async def daty_godziny ():
     """Managing time related events"""
     await client.wait_until_ready()
-
-    time.sleep(4)
+    
+    
+    
+    await asyncio.sleep(4)
     jarkendar = client.get_channel(starting['jarkendar'])
     samo_jedzonko = client.get_channel(starting['samo_jedzonko'])
     bot_test = client.get_channel(starting['bot_test'])
 
     global papa
+    
+    
     while not client.is_closed():
-        await asyncio.sleep(59)
-
+        await asyncio.sleep(25)
+        
+        
         now = datetime.now()
         timesdata = now.strftime("%d/%m/%Y %H:%M:%S")
         curr_time = timesdata.split(' ', 2)
@@ -521,13 +535,9 @@ async def daty_godziny ():
             else:
                 pass
 
-        if int(houer) == 6 and int(minnute) == 0:
-            pass
 
-        if (int(houer) == 3) and (int(minnute) == 50):
-            await jarkendar.send(weather.requesting(starting['home']))
-            await jarkendar.send(weather.requesting(starting['work']))
+    
+            
 
-client.loop.create_task(daty_godziny())
 client.run(TOKEN)
 
