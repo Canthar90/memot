@@ -6,100 +6,36 @@ from datetime import datetime, timedelta
 class Garbagson:
     """Checking if there are any upcoming garbage"""
 
-    def __init__(self):
-        """loading base data"""
-        with open("garbage.json") as file:
-            self.garbage_dict = json.load(file)
-
+    def __init__(self) -> None:
+        with open("garbage.json", "r") as file:
+            self.garbage_events = json.load(file)
+        
     def trash_time(self):
-        """checking if there is any garbage upcoming in 7 days """
-        current = dt.date.today()
-        future = current + timedelta(days=7)
-        empty = []
-
-        plastiki_dt = []
-        for elem in self.garbage_dict['Plastiki']:
-            try:
-                new = datetime.strptime(elem, '%d/%m/%Y')
-                plastiki_dt.append(new.date())
-            except ValueError:
-                self.garbage_dict["Plastiki"].remove(elem)
-
-        mieszane_dt = []
-        for elem in self.garbage_dict['Mieszane']:
-            try:    
-                new = datetime.strptime(elem, '%d/%m/%Y')
-                mieszane_dt.append(new.date())
-            except ValueError:
-                self.garbage_dict['Mieszane'].remove(elem)
-
-        szklo_dt = []
-        for elem in self.garbage_dict['Szklo']:
-            try:
-                new = datetime.strptime(elem, '%d/%m/%Y')
-                szklo_dt.append(new.date())
-            except ValueError:
-                self.garbage_dict['Szklo'].remove(elem)
-
-        bio_dt = []
-        for elem in self.garbage_dict['Bio']:
-            try:
-                new = datetime.strptime(elem, '%d/%m/%Y')
-                bio_dt.append(new.date())
-            except ValueError:
-                self.garbage_dict['Bio'].remove(elem)
-
-        gabaryty_dt = []
-        for elem in self.garbage_dict['Gabaryty']:
-            try:
-                new = datetime.strptime(elem, '%d/%m/%Y')
-                gabaryty_dt.append(new.date())
-            except ValueError:
-                self.garbage_dict['Gabaryty'].remove(elem)
-
-        popioły_dt = []
-        for elem in self.garbage_dict['Popioly']:
-            try:
-                new = datetime.strptime(elem, '%d/%m/%Y')
-                popioły_dt.append(new.date())
-            except ValueError:
-                self.garbage_dict['Popioly'].remove(elem)
-
-        message = 'Upcoming garbage: \n'
-
-        matching_gabaryty = [gabaryt for gabaryt in gabaryty_dt if (gabaryt >= current) and (gabaryt <= future)]
-        if not matching_gabaryty == empty:
-            message += f"Gabaryty at: {matching_gabaryty[0].strftime('%A')} full date:" \
-                       f" {matching_gabaryty[0].strftime('%d-%m-%Y')} \n"
-
-        matching_mieszane = [mieszane for mieszane in mieszane_dt if mieszane >= current and mieszane <= future]
-        if not matching_mieszane == empty:
-            message += f"Mieszane at: {matching_mieszane[0].strftime('%A')} full date: " \
-                       f"{matching_mieszane[0].strftime('%d-%m-%Y')} \n"
-
-        matching_popioły = [popiol for popiol in popioły_dt if popiol >= current and popiol <= future]
-        if not matching_popioły == empty:
-            message += f"Popioły at: {matching_popioły[0].strftime('%A')} full date: " \
-                       f"{matching_popioły[0].strftime('%d-%m-%Y')} \n"
-
-        matching_szklo = [glass for glass in szklo_dt if glass >= current and glass <= future]
-        if not matching_szklo == empty:
-            message += f"Szkło at: {matching_szklo[0].strftime('%A')} full date: " \
-                       f"{matching_szklo[0].strftime('%d-%m-%Y')} \n"
-
-        matching_bio = [flower for flower in bio_dt if flower >= current and flower <= future]
-        if not matching_bio == empty:
-            message += f"Bio at: {matching_bio[0].strftime('%A')} full date: " \
-                       f"{matching_bio[0].strftime('%d-%m-%Y')} \n"
-
-        matching_plastiki = [plastik for plastik in plastiki_dt if plastik >= current and plastik <= future]
-        if not matching_plastiki == empty:
-            message += f"Plastiki at: {matching_plastiki[0].strftime('%A')} full date: " \
-                       f"{matching_plastiki[0].strftime('%d-%m-%Y')} \n"
-
-        if message == 'Upcoming garbage: \n':
-            return 'There is no upcoming garbage in next 7 days'
+        current_date = dt.date.today()
+        future_date = current_date + dt.timedelta(days=20)
+        message = ''
+        nearest_events = []
+        for key, values in self.garbage_events.items():
+            
+            for val in values:
+                date_val = dt.datetime.strptime(val, "%d/%m/%Y").date()
+                if future_date > date_val > current_date:
+                    
+                    nearest_events.append((key, val))
+        
+        if nearest_events:
+            print(nearest_events)            
+            nearest_events.sort(key=lambda a: a[1])
+            print(nearest_events)
+            message += "Upcoming garbage in next 7 days: \n"
+                
+            for event in nearest_events:
+                message += f"{event[0]} at {event[1]} \n"
+            print(message)
+            return message
+                
         else:
+            message = "There is no upcoming garbage in next 7 days"
             return message
 
 
