@@ -12,7 +12,7 @@ class Garbagson:
         
     def trash_time(self):
         current_date = dt.date.today()
-        future_date = current_date + dt.timedelta(days=20)
+        future_date = current_date + dt.timedelta(days=7)
         message = ''
         nearest_events = []
         for key, values in self.garbage_events.items():
@@ -23,10 +23,8 @@ class Garbagson:
                     
                     nearest_events.append((key, val))
         
-        if nearest_events:
-            print(nearest_events)            
-            nearest_events.sort(key=lambda a: a[1])
-            print(nearest_events)
+        if nearest_events:         
+            nearest_events.sort(key=lambda a: int(a[1].split("/")[0]))
             message += "Upcoming garbage in next 7 days: \n"
                 
             for event in nearest_events:
